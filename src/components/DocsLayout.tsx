@@ -2,6 +2,7 @@ import { DocsHeader } from '@/components/DocsHeader'
 import { PrevNextLinks } from '@/components/PrevNextLinks'
 import { Prose } from '@/components/Prose'
 
+import VideoPreview from '@/components/VideoPreview'
 import Link from 'next/link'
 import { Icon } from '@/components/Icon'
 
@@ -27,33 +28,6 @@ export function DocsLayout({
   )
 }
 
-function VideoPreview({ slug }: { slug?: string }) {
-  if (!slug) return null
-
-  return (
-    <>
-      <h2 id="preview">Preview</h2>
-      <p>
-        This is a looping video showing how this example behaves. Click it to
-        open the live example in a new window:
-      </p>
-
-      <Link href={`/live/${slug}`} target="_blank">
-        <video
-          className="rounded-lg border border-slate-200 object-cover p-4 shadow-lg dark:border-slate-800"
-          src={`/videos/${slug}/video.mp4`}
-          controls
-          muted
-          loop
-          autoPlay
-          height={600}
-          width={800}
-        />
-      </Link>
-    </>
-  )
-}
-
 function SeeLiveExample({ slug }: { slug?: string }) {
   return (
     <ExampleHeaderLink
@@ -70,7 +44,7 @@ function SeeSourceCode({ slug }: { slug?: string }) {
     <ExampleHeaderLink
       title="Full Example Source"
       icon="presets"
-      href={`https://github.com/edspencer/rsc-examples/src/app/(examples)/${slug}`}
+      href={`https://github.com/edspencer/rsc-examples/tree/main/src/app/live/${slug}/page.tsx`}
     />
   )
 }
@@ -100,9 +74,9 @@ function ExampleHeaderLink({
   return (
     <div className="group relative rounded-xl border border-slate-200 dark:border-slate-800">
       <div className="absolute -inset-px rounded-xl border-2 border-transparent opacity-0 [background:linear-gradient(var(--quick-links-hover-bg,theme(colors.sky.50)),var(--quick-links-hover-bg,theme(colors.sky.50)))_padding-box,linear-gradient(to_top,theme(colors.indigo.400),theme(colors.cyan.400),theme(colors.sky.500))_border-box] group-hover:opacity-100 dark:[--quick-links-hover-bg:theme(colors.slate.800)]" />
-      <div className="relative overflow-hidden rounded-xl p-6">
+      <div className="relative flex gap-4 overflow-hidden rounded-xl p-6">
         <Icon icon={icon} className="h-8 w-8" />
-        <h2 className="mt-4 font-display text-base text-slate-900 dark:text-white">
+        <h2 className="font-display text-base text-slate-900 dark:text-white">
           <Link target={target} href={href}>
             <span className="absolute -inset-px rounded-xl" />
             {title}

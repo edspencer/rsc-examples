@@ -42,14 +42,6 @@ export const navigation = [
         title: 'Fast, no suspense',
         href: '/async-pages/fast/no-suspense',
       },
-      {
-        title: 'Fast, page-level suspense',
-        href: '/async-pages/fast/page-suspense',
-      },
-      {
-        title: 'Fast, component-level suspense',
-        href: '/async-pages/fast/component-suspense',
-      },
     ],
   },
   {
