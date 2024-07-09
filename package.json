@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "video": "npx tsx src/lib/video.ts"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
@@ -16,18 +17,24 @@
     "@markdoc/next.js": "^0.3.7",
     "@sindresorhus/slugify": "^2.1.0",
     "@tailwindcss/typography": "^0.5.7",
+    "@types/mdx": "^2.0.13",
     "@types/node": "^20.10.8",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "@types/react-highlight-words": "^0.16.4",
     "autoprefixer": "^10.4.12",
+    "bright": "^0.8.5",
     "clsx": "^2.1.0",
     "fast-glob": "^3.2.12",
     "flexsearch": "^0.7.31",
+    "fluent-ffmpeg": "^2.1.3",
     "js-yaml": "^4.1.0",
+    "mdx": "^0.2.3",
     "next": "^14.0.4",
     "next-themes": "^0.2.1",
     "prism-react-renderer": "^2.0.6",
+    "puppeteer": "^22.12.1",
+    "puppeteer-screen-recorder": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-highlight-words": "^0.20.0",
@@ -36,6 +43,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.24",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "prettier": "^3.3.2",

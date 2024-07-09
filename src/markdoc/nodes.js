@@ -4,7 +4,6 @@ import yaml from 'js-yaml'
 
 import { DocsLayout } from '@/components/DocsLayout'
 import { Fence } from '@/components/Fence'
-import { Link } from '@/components/Link'
 
 let documentSlugifyMap = new Map()
 
@@ -55,6 +54,9 @@ const nodes = {
     render: Fence,
     attributes: {
       language: {
+        type: String,
+      },
+      title: {
         type: String,
       },
     },

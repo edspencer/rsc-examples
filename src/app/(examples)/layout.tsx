@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     default: 'React Server Components Examples',
   },
   description:
-    'Cache every single thing your app could ever do ahead of time, so your code never even has to run at all.',
+    'An increasingly comprehensive set of examples on the various ways to use React Server Components',
 }
 
 export default function RootLayout({

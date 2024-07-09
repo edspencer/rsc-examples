@@ -9,7 +9,9 @@ nextjs:
 
 This example shows how to slow-loading data calls can cause an asynchronous server Page component to delay interactivity.
 
-```jsx
+First we create a function called `slowDataLoad`, which just simulates a database call that takes 2 seconds to resolve, returning a string. `slowDataLoad` is an async function, so while it is running the `async function Page` function, which renders the page, will block until the 2 second data load has completed.
+
+```app/page.tsx
 //this just simulates a database call or similar that takes 2 seconds
 async function slowDataLoad(): Promise<string> {
   return new Promise((resolve) => {
@@ -19,6 +21,7 @@ async function slowDataLoad(): Promise<string> {
   })
 }
 
+//this entire Page is blocked because of the await slowDataLoad()
 export default async function Page() {
   const data = await slowDataLoad()
 
@@ -33,7 +36,10 @@ export default async function Page() {
     </>
   )
 }
-
 ```
 
-See [Live Page](/live/async-pages/slow/no-suspense)
+## Try to avoid async/await in these situations
+
+As you can see, this approach allows us to write async/await code, which is syntactically great, but it also lead to a worst-possible outcome for the user, who had to wait until all the data were fetched before the application would even show one pixel.
+
+If you have data to load from sources that you have high confidence can be retrieved in the order of 10ms, using `async` in your Page definitions will not have a serious impact on performance, but anything that can take significantly longer than 10ms to fetch should be wrapped in a Suspense boundary approach so that UI can be shown to the user almost instantly.

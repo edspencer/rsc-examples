@@ -1,0 +1,68 @@
+---
+title: Slow-loading data, page-level suspense, async page component
+slug: async-pages/slow/page-suspense
+nextjs:
+  metadata:
+    title: Slow-loading data, page-level suspense, async page component
+    description: This is as easy to achieve as defining a loading.tsx file
+---
+
+This example shows how to use the built-in `loading.tsx` convention of next.js to take advantage of automatic full-page Suspense boundary created when this file is present.
+
+As before we have a `slowDataLoad()` function that simulates a database call that takes 3 seconds to return.
+
+```app/page.tsx
+//this just simulates a database call or similar that takes 2 seconds
+async function slowDataLoad(): Promise<string> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('This data took 2 seconds to load')
+    }, 2000)
+  })
+}
+
+export default async function Page() {
+  const data = await slowDataLoad()
+
+  return (
+    <>
+      <h1>RSC - async Page with no Suspense</h1>
+      <p>{data}</p>
+      <p>
+        Suspense was not used at all, so you had to wait 2 seconds to see even a
+        single pixel rendered in this example.
+      </p>
+    </>
+  )
+}
+```
+
+In this case we'll just define a `loading.tsx` file in the same directory as our `page.tsx`. Next.js will automatically use whatever React Component is exported as default from `loading.tsx` as the `fallback` in a `<Suspense>` boundary that next.js automatically wraps around the component exported from `page.tsx`:
+
+```app/loading.tsx
+export default function Loading() {
+  return (
+    <div>
+      Loading... (this is the content of `loading.tsx`, being shown for about 3
+      seconds before the data loads and this gets replaced)
+    </div>
+  )
+}
+```
+
+Under the covers, the presence of the `loading.tsx` file basically makes your Page work a bit more like this, with a Suspense boundary injected as a wrapper around your own Component:
+
+```app/page-wrapper.tsx
+import Loading from './loading'
+import Page from './page'
+
+export default async function SuspendablePage() {
+  return (
+    <Suspense fallback={Loading}>
+      <Page />
+    </Suspense>
+  )
+}
+```
+
+For this reason, in the live demo for this example, you will see the loading message appear instantly, and then be swapped out 3 seconds later when `slowDataLoad()` resolves.

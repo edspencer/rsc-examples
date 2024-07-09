@@ -1,10 +1,6 @@
-import { type Node } from '@markdoc/markdoc'
-
 import { DocsHeader } from '@/components/DocsHeader'
 import { PrevNextLinks } from '@/components/PrevNextLinks'
 import { Prose } from '@/components/Prose'
-import { TableOfContents } from '@/components/TableOfContents'
-import { collectSections } from '@/lib/sections'
 
 import Link from 'next/link'
 import { Icon } from '@/components/Icon'
@@ -12,25 +8,50 @@ import { Icon } from '@/components/Icon'
 export function DocsLayout({
   children,
   frontmatter: { title, slug },
-  nodes,
 }: {
   children: React.ReactNode
   frontmatter: { title?: string; slug?: string }
-  nodes: Array<Node>
 }) {
-  let tableOfContents = collectSections(nodes)
-
   return (
     <>
       <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
         <article>
           <DocsHeader title={title} />
           <ExampleHeader slug={slug} />
-          <Prose>{children}</Prose>
+          <Prose>
+            {children}
+            <VideoPreview slug={slug} />
+          </Prose>
         </article>
         <PrevNextLinks />
       </div>
-      <TableOfContents tableOfContents={tableOfContents} />
+    </>
+  )
+}
+
+function VideoPreview({ slug }: { slug?: string }) {
+  if (!slug) return null
+
+  return (
+    <>
+      <h2 id="preview">Preview</h2>
+      <p>
+        This is a looping video showing how this example behaves. Click it to
+        open the live example in a new window:
+      </p>
+
+      <Link href={`/live/${slug}`} target="_blank">
+        <video
+          className="rounded-lg border border-slate-200 object-cover p-4 shadow-lg dark:border-slate-800"
+          src={`/videos/${slug}/video.mp4`}
+          controls
+          muted
+          loop
+          autoPlay
+          height={600}
+          width={800}
+        />
+      </Link>
     </>
   )
 }

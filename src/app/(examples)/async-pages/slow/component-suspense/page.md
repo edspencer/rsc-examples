@@ -1,0 +1,63 @@
+---
+title: Slow-loading data, component suspense, async page component
+slug: async-pages/slow/component-suspense
+nextjs:
+  metadata:
+    title: Slow-loading data, component suspense, async page component
+    description: This is a highly performant way to deliver UI
+---
+
+In this example, we use Component-level opt-in `<Suspense>` boundaries to instantly render the various parts of the UI as soon as they are ready.
+
+Here we have a bunch of UI that can be rendered immediately (all the static stuff), and then a single component called `DataComponent` that has a 3 second fetch call.
+
+Because we wrapped that in a `<Suspense>` boundary, next.js is able to instantly render and deliver to the browser all of that rendered HTML, leave a `<Suspense>` placeholder in the response, then when the sub-Component finally renders, stream the new content directly to the browser as part of the same http request:
+
+```app/page.tsx
+import { Suspense } from 'react'
+import Loading from '@/components/Loading'
+
+async function slowDataLoad(): Promise<string> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('This data took 3 seconds to load')
+    }, 3000)
+  })
+}
+
+//we placed a <Suspense> boundary around our <DataComponent />
+export default async function Page() {
+  return (
+    <>
+      <h1>RSC - async Page with Component-level Suspense</h1>
+      <p>
+        This paragraph was rendered instantly by the server. Underneath it is a
+        Suspense component, which loads data that takes 3 seconds to fetch:
+      </p>
+      <Suspense fallback={<Loading />}>
+        <DataComponent />
+      </Suspense>
+      <p>
+        This example renders 2 async components - the Page component and the
+        child DataComponent. The DataComponent loads data that takes 3 seconds
+        to load, but because we wrapped it inside Suspense, the page-level
+        component did not have anything else to wait around for (despite being
+        declared `async`), so it rendered immediately.
+      </p>
+      <p>
+        While the async Page component rendered, the Suspense fallback was shown
+        for 3 seconds until DataComponent resolved its data, at which point the
+        new content was streamed to the browser.
+      </p>
+    </>
+  )
+}
+
+async function DataComponent() {
+  const data = await slowDataLoad()
+
+  return <p>{data}</p>
+}
+```
+
+`<Suspense>` boundaries with React Server Components allow you to trivially slice up your application at almost any level in the React component tree, and have each slice load in the instant it's available, without blocking other parts of the UI from loading.

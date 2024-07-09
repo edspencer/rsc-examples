@@ -1,37 +1,28 @@
-'use client'
+import { Code } from 'bright'
 
-import { Fragment } from 'react'
-import { Highlight } from 'prism-react-renderer'
+Code.theme = {
+  dark: 'github-dark',
+  light: 'github-light',
+}
+
+Code.defaultProps = {
+  lang: 'shell',
+  theme: 'github-light',
+}
 
 export function Fence({
   children,
   language,
 }: {
-  children: string
+  children: React.ReactNode
   language: string
 }) {
+  //lmao this is horrible
+  const lang = language.split('.')[1]
+
   return (
-    <Highlight
-      code={children.trimEnd()}
-      language={language}
-      theme={{ plain: {}, styles: [] }}
-    >
-      {({ className, style, tokens, getTokenProps }) => (
-        <pre className={className} style={style}>
-          <code>
-            {tokens.map((line, lineIndex) => (
-              <Fragment key={lineIndex}>
-                {line
-                  .filter((token) => !token.empty)
-                  .map((token, tokenIndex) => (
-                    <span key={tokenIndex} {...getTokenProps({ token })} />
-                  ))}
-                {'\n'}
-              </Fragment>
-            ))}
-          </code>
-        </pre>
-      )}
-    </Highlight>
+    <Code title={language} lang={lang}>
+      {children}
+    </Code>
   )
 }
