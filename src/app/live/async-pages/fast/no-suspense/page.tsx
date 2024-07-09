@@ -1,4 +1,4 @@
-//this just simulates a database call or similar that takes 2 seconds
+//this just simulates a database call or similar that takes 20 milliseconds seconds
 async function slowDataLoad(): Promise<string> {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -17,7 +17,7 @@ export default async function Page() {
       <p>{data}</p>
       <p>
         Suspense was not used at all, but the data source was so fast that you
-        didn't even notice the delay.
+        didn&apos;t even notice the delay.
       </p>
     </>
   )
