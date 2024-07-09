@@ -1,4 +1,15 @@
+import { title } from 'process'
+
 export const navigation = [
+  {
+    title: 'Home',
+    links: [
+      {
+        title: 'Overview',
+        href: '/',
+      },
+    ],
+  },
   {
     title: 'Static Pages',
     links: [
