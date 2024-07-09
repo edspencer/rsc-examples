@@ -13,19 +13,17 @@ export function DocsLayout({
   frontmatter: { title?: string; slug?: string }
 }) {
   return (
-    <>
-      <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
-        <article>
-          <DocsHeader title={title} />
-          <ExampleHeader slug={slug} />
-          <Prose>
-            {children}
-            <VideoPreview slug={slug} />
-          </Prose>
-        </article>
-        <PrevNextLinks />
-      </div>
-    </>
+    <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
+      <article>
+        <DocsHeader title={title} />
+        <ExampleHeader slug={slug} />
+        <Prose>
+          {children}
+          <VideoPreview slug={slug} />
+        </Prose>
+      </article>
+      <PrevNextLinks />
+    </div>
   )
 }
 
@@ -78,6 +76,8 @@ function SeeSourceCode({ slug }: { slug?: string }) {
 }
 
 function ExampleHeader({ slug }: { slug?: string }) {
+  if (!slug) return
+
   return (
     <div className="not-prose my-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
       <SeeLiveExample slug={slug} />

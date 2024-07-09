@@ -10,7 +10,7 @@ import path from 'path'
 const execPromise = util.promisify(exec)
 
 const liveExamplesDir = path.join(__dirname, '..', 'app', 'live')
-const videoOutputDir = path.join(__dirname, '..', 'public', 'videos')
+const videoOutputDir = path.join(__dirname, '..', '..', 'public', 'videos')
 
 async function findDirectoriesWithPageFile(
   parentDir: string,
