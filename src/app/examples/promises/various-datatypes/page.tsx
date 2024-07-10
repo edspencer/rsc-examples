@@ -13,12 +13,6 @@ async function getData(value: any, delay: number): Promise<any> {
 export default function SuspensePage() {
   return (
     <div className="mx-4 my-4 flex flex-col gap-4">
-      <h1 className="text-3xl">Server Component Promises</h1>
-
-      <Suspense fallback={<div>Loading...</div>}>
-        <HeavyHeavy />
-      </Suspense>
-
       <p>This line rendered on the server. Below this, values will stream in</p>
       <p>Now here's a Promise that resolved to a string:</p>
       <SuspenseWrapper value={'some string'} delay={1000} />
@@ -46,11 +40,6 @@ export default function SuspensePage() {
       </Suspense>
     </div>
   )
-}
-
-async function HeavyHeavy() {
-  const data = await getData({ some: 'moar data' }, 3000)
-  return <ServerChildComponent data={data} />
 }
 
 function renderHeavyComponent(delay: number): Promise<React.ReactNode> {
