@@ -3,7 +3,7 @@ export const navigation = [
     title: 'Home',
     links: [
       {
-        title: 'Overview',
+        title: 'Examples Gallery',
         href: '/',
       },
     ],
