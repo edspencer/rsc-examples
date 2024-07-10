@@ -72,10 +72,8 @@ export default async function Page({ params }: Props) {
   const content = examples.getContent(example)
 
   return (
-    <div>
-      <DocsLayout frontmatter={example}>
-        <MarkdownContent content={content} />
-      </DocsLayout>
-    </div>
+    <DocsLayout frontmatter={example}>
+      <MarkdownContent content={content} />
+    </DocsLayout>
   )
 }
