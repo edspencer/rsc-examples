@@ -17,7 +17,7 @@ function findMdxFiles(dir: string, files: string[] = []) {
 
     if (stats.isDirectory()) {
       findMdxFiles(fullPath, files)
-    } else if (stats.isFile() && path.extname(fullPath) === '.md') {
+    } else if (stats.isFile() && path.extname(fullPath) === '.mdx') {
       files.push(fullPath)
     }
   })
@@ -27,7 +27,7 @@ function findMdxFiles(dir: string, files: string[] = []) {
 
 export const examplesDir = path.join(process.cwd(), 'src', 'app', 'examples')
 export const pathToExampleFile = (example: any) =>
-  path.join(examplesDir, example.slug, 'page.md')
+  path.join(examplesDir, example.slug, 'page.mdx')
 
 export default class Examples {
   baseDirectory: string

@@ -17,6 +17,7 @@ Code.theme = {
 
 Code.defaultProps = {
   lang: 'shell',
+  theme: 'github-light',
 }
 
 const mdxOptions = {
