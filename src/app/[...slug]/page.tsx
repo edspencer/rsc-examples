@@ -20,9 +20,7 @@ export async function generateMetadata(
   const example = publishedExamples.find((e: any) => e.slug === slug)
 
   if (!example) {
-    return {
-      title: '404',
-    }
+    return notFound()
   }
 
   return {

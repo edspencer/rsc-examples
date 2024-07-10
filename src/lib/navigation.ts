@@ -74,10 +74,10 @@ export const navigation = [
         title: 'Various data types',
         href: '/promises/various-datatypes',
       },
-      {
-        title: 'With custom payload',
-        href: '/promises/with-custom-payload',
-      },
+      // {
+      //   title: 'With custom payload',
+      //   href: '/promises/with-custom-payload',
+      // },
     ],
   },
   {
