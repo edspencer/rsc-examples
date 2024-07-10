@@ -3,10 +3,18 @@ title: Fast-loading data, no suspense, async page component
 galleryTitle: No suspense, fast data loading
 description: If your data sources are always fast, this approach is simple and fast enough
 slug: pages/fast/no-suspense
+fullPage: true
 tags:
   - page
   - async
 ---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [async React Server
+  Components](https://edspencer.net/2024/6/18/understanding-react-server-components-and-suspense).
+  See that post for a more detailed explanation of the concepts here.
+</Callout>
 
 This example shows us not using `<Suspense>` boundaries at all, nor a `loading.tsx` file. But we get away with it because we're loading from a fast (simulated) database that returns in 20ms.
 

@@ -15,7 +15,7 @@ export default function MicrophoneList() {
 
   return (
     <div>
-      <h1>Available Microphones</h1>
+      <h3>Available Microphones</h3>
       <p>
         This component is marked `use client`, because it needs to run in the
         browser to access the mediaDevices API.

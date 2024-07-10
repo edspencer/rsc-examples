@@ -3,6 +3,7 @@ title: Slow-loading data, page-level suspense, async page component
 slug: pages/slow/page-suspense
 galleryTitle: Page-level Suspense
 description: Uses a loading.tsx file to automatically wrap the page in a Suspense boundary
+fullPage: true
 tags:
   - page
   - suspense
@@ -10,6 +11,13 @@ tags:
   - nextjs
   - slowdata
 ---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [async React Server
+  Components](https://edspencer.net/2024/6/18/understanding-react-server-components-and-suspense).
+  See that post for a more detailed explanation of the concepts here.
+</Callout>
 
 This example shows how to use the built-in `loading.tsx` convention of next.js to take advantage of automatic full-page Suspense boundary created when this file is present.
 

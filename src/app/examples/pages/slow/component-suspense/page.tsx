@@ -1,13 +1,8 @@
 import { Suspense } from 'react'
 import Loading from '@/components/Loading'
+import Table from '@/components/examples/table'
 
-async function slowDataLoad(): Promise<string> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('This data took 3 seconds to load')
-    }, 3000)
-  })
-}
+import { slowDataLoad } from './data'
 
 export default async function Page() {
   return (
@@ -18,7 +13,7 @@ export default async function Page() {
         Suspense component, which loads data that takes 3 seconds to fetch:
       </p>
       <Suspense fallback={<Loading />}>
-        <DataComponent />
+        <Table dataPromise={slowDataLoad()} />
       </Suspense>
       <p>
         This example renders 2 async components - the Page component and the
@@ -34,10 +29,4 @@ export default async function Page() {
       </p>
     </>
   )
-}
-
-async function DataComponent() {
-  const data = await slowDataLoad()
-
-  return <p>{data}</p>
 }

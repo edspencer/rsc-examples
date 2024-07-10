@@ -1,16 +1,15 @@
 import { DocsHeader } from '@/components/DocsHeader'
 import { PrevNextLinks } from '@/components/PrevNextLinks'
 import { Prose } from '@/components/Prose'
-
-import VideoPreview from '@/components/VideoPreview'
 import { ExampleHeader } from './ExampleHeader'
+import { FullPageDemo } from './FullPageDemo'
 
 export function DocsLayout({
   children,
-  frontmatter: { title, slug },
+  frontmatter: { title, slug, fullPage = false },
 }: {
   children: React.ReactNode
-  frontmatter: { title?: string; slug?: string }
+  frontmatter: { title?: string; slug?: string; fullPage?: boolean }
 }) {
   return (
     <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
@@ -19,7 +18,7 @@ export function DocsLayout({
         <ExampleHeader slug={slug} />
         <Prose>
           {children}
-          <VideoPreview slug={slug} />
+          <FullPageDemo slug={slug} fullPage={fullPage} />
         </Prose>
       </article>
       <PrevNextLinks />

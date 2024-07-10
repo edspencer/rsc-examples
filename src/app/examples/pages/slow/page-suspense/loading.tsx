@@ -1,8 +1,10 @@
-export default function Loading() {
+import Loading from '@/components/Loading'
+
+export default function LoadingPage() {
   return (
-    <div>
-      Loading... (this is the content of `loading.tsx`, being shown for about 3
-      seconds before the data loads and this gets replaced)
-    </div>
+    <Loading
+      message="this is the content of `loading.tsx`, being shown for about 3
+      seconds before the data loads and this gets replaced"
+    />
   )
 }

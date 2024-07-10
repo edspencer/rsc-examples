@@ -7,11 +7,12 @@ export default function VideoPreview({ slug }: { slug?: string }) {
     <>
       <h2 id="preview">Video Preview</h2>
       <p>
-        This is a looping video showing how this example behaves. Click it to
-        open the live example in a new window:
+        In case the iframe doesn't work for some reason, this is a looping video
+        of what you would see. Click the video to open the full page example in
+        a new tab.
       </p>
 
-      <Link href={`/live/${slug}`} target="_blank">
+      <Link href={`/examples/${slug}`} target="_blank">
         <video
           className="rounded-lg border border-slate-200 object-cover p-4 shadow-lg dark:border-slate-800"
           src={`/videos/${slug}/video.mp4`}

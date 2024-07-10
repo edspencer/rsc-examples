@@ -59,12 +59,12 @@ export const navigation = [
     title: 'Promises',
     links: [
       {
-        title: 'Rendering Components',
-        href: '/promises/rendering-components',
-      },
-      {
         title: 'Resolving promises',
         href: '/promises/resolved',
+      },
+      {
+        title: 'Rendering Components',
+        href: '/promises/rendering-components',
       },
       {
         title: 'Rejected promises',
@@ -80,25 +80,25 @@ export const navigation = [
       // },
     ],
   },
-  {
-    title: 'Forms',
-    links: [
-      {
-        title: 'Basic',
-        href: '/forms/basic',
-      },
-      {
-        title: 'Validation',
-        href: '/forms/validation',
-      },
-      {
-        title: 'Submission',
-        href: '/forms/submission',
-      },
-      {
-        title: 'Submission with validation',
-        href: '/forms/submission-with-validation',
-      },
-    ],
-  },
+  // {
+  //   title: 'Forms',
+  //   links: [
+  //     {
+  //       title: 'Basic',
+  //       href: '/forms/basic',
+  //     },
+  //     {
+  //       title: 'Validation',
+  //       href: '/forms/validation',
+  //     },
+  //     {
+  //       title: 'Submission',
+  //       href: '/forms/submission',
+  //     },
+  //     {
+  //       title: 'Submission with validation',
+  //       href: '/forms/submission-with-validation',
+  //     },
+  //   ],
+  // },
 ]

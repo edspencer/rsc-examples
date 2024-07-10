@@ -3,12 +3,20 @@ title: Slow-loading data, component suspense, async page component
 galleryTitle: Component-level Suspense with slow data
 description: Renders parts of your UI instantly, and streams in the rest as it becomes available
 slug: pages/slow/component-suspense
-bestpractice: true
+bestPractice: true
+fullPage: true
 tags:
   - page
   - suspense
   - component-suspense
 ---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [async React Server
+  Components](https://edspencer.net/2024/6/18/understanding-react-server-components-and-suspense).
+  See that post for a more detailed explanation of the concepts here.
+</Callout>
 
 In this example, we use Component-level opt-in `<Suspense>` boundaries to instantly render the various parts of the UI as soon as they are ready.
 

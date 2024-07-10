@@ -1,0 +1,93 @@
+---
+title: Streaming response data using a Promise
+galleryTitle: Streaming data from the server using a Promise
+description: Remarkably, in-progress Promises can be sent from the server to the client
+slug: promises/resolved
+fullPage: true
+tags:
+  - promises
+  - data
+---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [streaming data with
+  promises](https://edspencer.net/2024/7/12/promises-across-the-void-react-server-components).
+  See that post for a more detailed explanation of the concepts here.
+</Callout>
+
+One cool thing we can do with React Server Components is stream data from server to client using a Promise. From our code's perspective, we can initiate a request on the server, which returns a Promise (e.g. has not actually given us the data yet), and then send that Promise to the client.
+
+The client can then wait for the Promise to resolve, and then render the data. All without holding up the rest of the UI from being rendered. Amazing. [[Read more about how this works]](https://edspencer.net/2024/7/12/promises-across-the-void-react-server-components)
+
+The page is simple - a server component itself, which renders mostly static content except for a data table, which relies on fetching data from somewhere. Our `<Table>` component accepts `dataPromise`, which is any Promise that will resolve to an array of objects, in this case after 1000ms delay:
+
+```page.tsx
+import { Suspense } from 'react'
+import Table from './table'
+import { getData } from './data'
+
+export default function SuspensePage() {
+  return (
+    <div className="mx-4 my-4 flex flex-col gap-4">
+      <p>This line rendered on the server.</p>
+      <p>
+        The table that appears below was rendered on the client, passed a
+        dataPromise prop that contains its data.
+      </p>
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <Table dataPromise={getData(1000)} />
+      </Suspense>
+    </div>
+  )
+}
+```
+
+The fake database is contemptibly simple:
+
+```data.ts
+const fakeData = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' },
+]
+
+export async function getData(delay: number): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(fakeData)
+    }, delay)
+  })
+}
+```
+
+And the `<Table>` component is a `client` component, which uses `use` to wait for the `dataPromise` to resolve before the component can be fully rendered and passed in to replace the `<Suspense>` fallback:
+
+```table.tsx
+'use client'
+import { use } from 'react'
+
+export default function Table({ dataPromise }: { dataPromise: Promise<any> }) {
+  const data = use(dataPromise)
+
+  return (
+    <table className="max-w-5xl table-auto text-left">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row: any) => (
+          <tr key={row.id}>
+            <td>{row.id}</td>
+            <td>{row.name}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+```

@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import Examples from '@/lib/examples'
 import ExampleGallery from '@/components/Gallery'
 import { PrevNextLinks } from '@/components/PrevNextLinks'
@@ -13,6 +15,28 @@ export default function HomePage() {
       <article>
         <DocsHeader title="RSC Examples Gallery" />
         <Prose>
+          <p>
+            Gathered here are a couple of dozen different examples of how to use
+            React Server Components. At the moment (July 2024), one needs to use
+            a framework to take advantage of these things. All of these examples
+            use <a href="https://nextjs.org">Next.js</a> as the framework of
+            choice.
+          </p>
+
+          <p>
+            Most of these examples were made to support a{' '}
+            <Link href="https://edspencer.net/blog/tag/rsc">
+              series of blog posts I wrote
+            </Link>
+            {` `}on{` `}
+            <Link href="https://edspencer.net/blog/tag/rsc">
+              React Server Components.
+            </Link>
+            {` `}Some examples link to the original blog post that they were
+            created for.
+          </p>
+
+          <h3>All Examples</h3>
           <ExampleGallery examples={publishedExamples} />
         </Prose>
       </article>
