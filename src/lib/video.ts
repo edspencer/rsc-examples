@@ -36,6 +36,13 @@ async function findDirectoriesWithPageFile(
   return result
 }
 
+const greenTick = '\x1b[32m✔\x1b[0m'
+const redCross = '\x1b[31m✖\x1b[0m'
+const yellowSkip = '\x1b[33m⏭\x1b[0m'
+
+console.log(`${greenTick} This is a green tick (check) symbol`)
+console.log(`${redCross} This is a red cross symbol`)
+
 async function recordPages() {
   const slugs = await findDirectoriesWithPageFile(liveExamplesDir)
   console.log(`Found ${slugs.length} directories with page.tsx files`)
@@ -48,12 +55,17 @@ async function recordPages() {
       fs.mkdirSync(videoOutputParentDir, { recursive: true })
     }
     const videoFile = path.join(videoOutputDir, slug, 'video.mp4')
-    console.log(`Recording page: ${slug}`)
 
-    console.log(videoFile)
+    if (fs.existsSync(videoFile)) {
+      console.log(`${yellowSkip} Video already exists for page: ${slug}`)
+    } else {
+      console.log(`Recording page: ${slug}`)
 
-    const url = `http://localhost:3002/live/${slug}` // Replace with your URL
-    await recordPage(url, videoFile)
+      console.log(videoFile)
+
+      const url = `http://localhost:3002/live/${slug}` // Replace with your URL
+      await recordPage(url, videoFile)
+    }
   }
 }
 
@@ -142,7 +154,7 @@ async function trimAndOverlayTimer(inputFile: string, outputFile: string) {
       throw error
     })
 
-  console.log('Trimming and overlaying timer completed')
+  console.log(`${greenTick} Trimming and overlaying timer completed`)
 }
 
 function buffersAreEqual(buf1: Buffer, buf2: Buffer): boolean {
