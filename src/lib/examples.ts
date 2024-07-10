@@ -7,6 +7,16 @@ export type Tag = {
   count: number
 }
 
+export type Example = {
+  title: string
+  date: string
+  slug: string
+  tags: string[]
+  status: string
+  galleryTitle: string
+  description: string
+}
+
 //returns an array of all .mdx files in a directory and its subdirectories
 function findMdxFiles(dir: string, files: string[] = []) {
   const items = fs.readdirSync(dir)
@@ -32,8 +42,8 @@ export const pathToExampleFile = (example: any) =>
 export default class Examples {
   baseDirectory: string
   allFiles: string[]
-  allExamples: any[]
-  publishedExamples: any[]
+  allExamples: Example[]
+  publishedExamples: Example[]
 
   constructor() {
     this.baseDirectory = path.join(examplesDir)
@@ -48,7 +58,7 @@ export default class Examples {
         const source = fs.readFileSync(file)
         const { data } = matter(source)
 
-        return data
+        return data as Example
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     // console.timeEnd('Reading all .mdx files');
