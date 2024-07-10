@@ -1,6 +1,6 @@
 ---
 title: Slow-loading data, component suspense, async page component
-slug: async-pages/slow/component-suspense
+slug: pages/slow/component-suspense
 nextjs:
   metadata:
     title: Slow-loading data, component suspense, async page component

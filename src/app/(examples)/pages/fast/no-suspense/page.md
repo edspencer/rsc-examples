@@ -1,6 +1,6 @@
 ---
 title: Fast-loading data, no suspense, async page component
-slug: async-pages/fast/no-suspense
+slug: pages/fast/no-suspense
 nextjs:
   metadata:
     title: Fast-loading data, no suspense, async page component

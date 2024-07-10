@@ -1,5 +1,3 @@
-import { title } from 'process'
-
 export const navigation = [
   {
     title: 'Home',
@@ -24,40 +22,36 @@ export const navigation = [
     ],
   },
   {
-    title: 'Async Pages, with data',
+    title: 'Pages with slow data fetching',
     links: [
       {
-        title: 'Slow, no suspense',
-        href: '/async-pages/slow/no-suspense',
+        title: 'async page, no suspense',
+        href: '/pages/slow/no-suspense',
       },
       {
-        title: 'Slow, page-level suspense',
-        href: '/async-pages/slow/page-suspense',
+        title: 'page-level suspense',
+        href: '/pages/slow/page-suspense',
       },
       {
-        title: 'Slow, component-level suspense',
-        href: '/async-pages/slow/component-suspense',
-      },
-      {
-        title: 'Fast, no suspense',
-        href: '/async-pages/fast/no-suspense',
+        title: 'component-level suspense',
+        href: '/pages/slow/component-suspense',
       },
     ],
   },
   {
-    title: 'Sync Pages, with data',
+    title: 'Pages with fast data fetching',
     links: [
       {
-        title: 'No suspense',
-        href: '/sync-pages/no-suspense',
+        title: 'async, no suspense',
+        href: '/pages/fast/no-suspense',
       },
       {
         title: 'Page-level suspense',
-        href: '/sync-pages/page-suspense',
+        href: '/pages/fast/page-suspense',
       },
       {
         title: 'Component-level suspense',
-        href: '/sync-pages/component-suspense',
+        href: '/pages/fast/component-suspense',
       },
     ],
   },

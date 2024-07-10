@@ -40,9 +40,6 @@ const greenTick = '\x1b[32m✔\x1b[0m'
 const redCross = '\x1b[31m✖\x1b[0m'
 const yellowSkip = '\x1b[33m⏭\x1b[0m'
 
-console.log(`${greenTick} This is a green tick (check) symbol`)
-console.log(`${redCross} This is a red cross symbol`)
-
 async function recordPages() {
   const slugs = await findDirectoriesWithPageFile(liveExamplesDir)
   console.log(`Found ${slugs.length} directories with page.tsx files`)
@@ -148,7 +145,7 @@ async function trimAndOverlayTimer(inputFile: string, outputFile: string) {
       console.error(`ffmpeg stderr: ${stderr}`)
     })
     .catch((error) => {
-      console.error('Errored')
+      console.error(`${redCross} Errored`)
       console.error(`Error: ${error.message}`)
       console.error(`ffmpeg stderr: ${error.stderr}`)
       throw error
