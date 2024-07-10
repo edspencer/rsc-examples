@@ -9,7 +9,7 @@ import path from 'path'
 
 const execPromise = util.promisify(exec)
 
-const liveExamplesDir = path.join(__dirname, '..', 'app', 'live')
+const examplesDir = path.join(__dirname, '..', 'app', 'examples')
 const videoOutputDir = path.join(__dirname, '..', '..', 'public', 'videos')
 
 async function findDirectoriesWithPageFile(
@@ -41,7 +41,7 @@ const redCross = '\x1b[31m✖\x1b[0m'
 const yellowSkip = '\x1b[33m⏭\x1b[0m'
 
 async function recordPages() {
-  const slugs = await findDirectoriesWithPageFile(liveExamplesDir)
+  const slugs = await findDirectoriesWithPageFile(examplesDir)
   console.log(`Found ${slugs.length} directories with page.tsx files`)
   console.log(slugs)
 
@@ -60,7 +60,7 @@ async function recordPages() {
 
       console.log(videoFile)
 
-      const url = `http://localhost:3002/live/${slug}` // Replace with your URL
+      const url = `http://localhost:3002/examples/${slug}` // Replace with your URL
       await recordPage(url, videoFile)
     }
   }
@@ -79,7 +79,7 @@ async function recordPage(url: string, outputFile: string) {
   const page = await browser.newPage()
 
   const recorder = new PuppeteerScreenRecorder(page)
-  const tmpFile = path.join(liveExamplesDir, 'temp.mp4')
+  const tmpFile = path.join(examplesDir, 'temp.mp4')
   await recorder.start(tmpFile)
   await page.goto(url)
 

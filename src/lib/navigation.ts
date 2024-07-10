@@ -45,14 +45,14 @@ export const navigation = [
         title: 'async, no suspense',
         href: '/pages/fast/no-suspense',
       },
-      {
-        title: 'Page-level suspense',
-        href: '/pages/fast/page-suspense',
-      },
-      {
-        title: 'Component-level suspense',
-        href: '/pages/fast/component-suspense',
-      },
+      // {
+      //   title: 'Page-level suspense',
+      //   href: '/pages/fast/page-suspense',
+      // },
+      // {
+      //   title: 'Component-level suspense',
+      //   href: '/pages/fast/component-suspense',
+      // },
     ],
   },
   {
@@ -72,7 +72,7 @@ export const navigation = [
       },
       {
         title: 'Various data types',
-        href: '/promises/various-data-types',
+        href: '/promises/various-datatypes',
       },
       {
         title: 'With custom payload',

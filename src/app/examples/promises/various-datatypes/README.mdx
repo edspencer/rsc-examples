@@ -1,0 +1,141 @@
+---
+title: Streaming various types of data using Promises
+galleryTitle: Promises streaming various data types
+description: If your data sources are always fast, this approach is simple and fast enough
+slug: promises/various-datatypes
+tags:
+  - promises
+  - data
+---
+
+This example shows how we can stream various types of data to the client using Promises. Shown here are:
+
+- strings
+- integers/floats
+- plain JSON objects
+- arrays
+- rendered React Components
+
+This example is slightly more advanced in that it has a custom `<SuspenseWrapper />` component to avoid repeated code - take a look at the other Promise-based examples if this is confusing. Basically it's still just `<Suspense>` boundaries wrapping client components, passing in a Promise each time. The `getData` function just makes it easy for the example to return different types of data.
+
+```page.tsx
+import { Suspense } from 'react'
+import ClientPromise from '@/components/examples/ClientPromise'
+import ClientPortal from '@/components/examples/ClientPortal'
+
+async function getData(value: any, delay: number): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(value)
+    }, delay)
+  })
+}
+
+export default function SuspensePage() {
+  return (
+    <div className="mx-4 my-4 flex flex-col gap-4">
+      <h1 className="text-3xl">Server Component Promises</h1>
+      <p>This line rendered on the server. Below this, values will stream in</p>
+      <p>Now here's a Promise that resolved to a string:</p>
+      <SuspenseWrapper value={'some string'} delay={1000} />
+
+      <p>Now here's a Promise that resolved to an integer:</p>
+      <SuspenseWrapper value={12345} delay={2000} />
+
+      <p>Now here's a Promise that resolved to a float:</p>
+      <SuspenseWrapper value={123.45} delay={3000} />
+
+      <p>Now here's a Promise that resolved to an object:</p>
+      <SuspenseWrapper value={{ myKey: 'someValue' }} delay={4000} />
+
+      <p>
+        Now here's a Promise that resolved to an array (of acceptable elements):
+      </p>
+      <SuspenseWrapper
+        value={['some string', 12345, 123.45, { myKey: 'someValue' }]}
+        delay={5000}
+      />
+
+      <p>Server-rendered Component:</p>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ClientPortal childrenPromise={renderHeavyComponent(6000)} />
+      </Suspense>
+    </div>
+  )
+}
+
+function renderHeavyComponent(delay: number): Promise<React.ReactNode> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(<ServerChildComponent data={{ some: 'data' }} />)
+    }, delay)
+  })
+}
+
+function ServerChildComponent({ data }: { data: any }) {
+  return <div>{JSON.stringify(data)}</div>
+}
+
+function SuspenseWrapper({ value, delay }: { value: any; delay: number }) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ClientPromise dataPromise={getData(value, delay)} />
+    </Suspense>
+  )
+}
+```
+
+## Explanation
+
+The example uses its `getData` function to simulate the fetching of different types of data with different delays. `<SuspenseWrapper>` is a trivial custom component that wraps `<ClientPromise>` in a `<Suspense>` boundary, passing in the Promise returned by `getData`. It's important to keep those `<Suspense>` boundaries in the server component templates, not in client components.
+
+`ClientPromise` is a trivial client-side component that just renders the contents of a resolved Promise into a `<div>` or `<pre>` tag, depending on the type of the resolved value. We render a red border around it in the example to make it clear where the client component is.
+
+```ClientPromise.tsx
+'use client'
+import { use } from 'react'
+
+export default function ClientPromise({ dataPromise}: {
+  dataPromise: Promise<string>
+}) {
+  const data = use(dataPromise)
+
+  if (typeof data === 'object') {
+    return (
+      <pre className="border border-red-600">
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    )
+  }
+
+  return <div className="border border-red-600">{data}</div>
+}
+```
+
+The final example shows us returning a rendered React Component (or Component tree) from a Promise. This is a powerful feature of React Server Components, as it allows us to return complex client-side components from server components. In this case, we're just returning a simple `<ServerChildComponent>` with some data.
+
+This one is just a `<ClientPortal>` wrapped in a `<Suspense>` boundary. ClientPortal is a trivial client component that expects a `childrenPromise` prop, which is a Promise that resolves to a ReactNode. It uses the `use` hook to get the resolved value and render it, wrapping it in a blue border this time to show it's inside a client component.
+
+```ClientPortal.tsx
+'use client'
+import { use } from 'react'
+
+export default function ClientPortal({childrenPromise}: {
+  childrenPromise: Promise<React.ReactNode>
+}) {
+  const children = use(childrenPromise)
+
+  return <div className="border border-blue-600">{children}</div>
+}
+```
+
+The Portal component here is purely to show that a React component can be returned from a Promise and rendered on the client, which may be helpful in some cases, but `<Suspense>` already handles this for you in most cases:
+
+```amended-page.tsx
+      <p>Server-rendered Component:</p>
+      <Suspense fallback={<div>Loading...</div>}>
+
+        //You don't need a ClientPortal here, just use the Suspense boundary
+        <ServerChildComponent delay={6000}>
+      </Suspense>
+```
