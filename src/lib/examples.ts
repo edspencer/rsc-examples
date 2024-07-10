@@ -27,7 +27,7 @@ function findMdxFiles(dir: string, files: string[] = []) {
 
 export const examplesDir = path.join(process.cwd(), 'src', 'app', 'examples')
 export const pathToExampleFile = (example: any) =>
-  path.join(examplesDir, example.slug, 'page.mdx')
+  path.join(examplesDir, example.slug, 'README.mdx')
 
 export default class Examples {
   baseDirectory: string
