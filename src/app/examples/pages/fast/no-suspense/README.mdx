@@ -1,10 +1,11 @@
 ---
 title: Fast-loading data, no suspense, async page component
+galleryTitle: No suspense, fast data loading
+description: If your data sources are always fast, this approach is simple and fast enough
 slug: pages/fast/no-suspense
-nextjs:
-  metadata:
-    title: Fast-loading data, no suspense, async page component
-    description: If your data sources are always fast, this approach is simple and fast enough
+tags:
+  - page
+  - async
 ---
 
 This example shows us not using `<Suspense>` boundaries at all, nor a `loading.tsx` file. But we get away with it because we're loading from a fast (simulated) database that returns in 20ms.
