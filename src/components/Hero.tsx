@@ -57,7 +57,7 @@ export function Hero() {
                 using React Server Components.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
-                <Button href="/">Get started</Button>
+                <Button href="/static-pages/server-only">Get started</Button>
                 <Button
                   href="https://github.com/edspencer/rsc-examples"
                   variant="secondary"

@@ -6,6 +6,14 @@ import { PrevNextLinks } from '@/components/PrevNextLinks'
 import { DocsHeader } from '@/components/DocsHeader'
 import { Prose } from '@/components/Prose'
 
+import { type Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'React Server Components Examples Gallery',
+  description:
+    'An increasingly comprehensive set of examples on the various ways to use React Server Components',
+}
+
 export default function HomePage() {
   const examples = new Examples()
   const publishedExamples = examples.publishedExamples
