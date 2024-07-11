@@ -1,85 +1,108 @@
 import puppeteer from 'puppeteer'
+import commander from 'commander'
 import { PuppeteerScreenRecorder } from 'puppeteer-screen-recorder'
 import ffmpeg from 'fluent-ffmpeg'
+import Examples from './examples'
+import type { Example } from './examples'
 
 import { exec } from 'child_process'
 import fs from 'fs'
 import util from 'util'
 import path from 'path'
 
+const { program } = commander
+program.version('0.0.1')
+
+program
+  .option('-f, --force', 'Force re-record of all videos')
+  .option('-e, --example <slug>', 'Record a single example by slug')
+  .option('-h, --host <host>', 'Host to record from', 'http://localhost:3002')
+  .parse(process.argv)
+
 const execPromise = util.promisify(exec)
 
-const examplesDir = path.join(__dirname, '..', 'app', 'examples')
 const videoOutputDir = path.join(__dirname, '..', '..', 'public', 'videos')
 
-async function findDirectoriesWithPageFile(
-  parentDir: string,
-): Promise<string[]> {
-  const result: string[] = []
-
-  async function searchDir(dir: string, baseDir: string): Promise<void> {
-    const entries = await fs.promises.readdir(dir, { withFileTypes: true })
-
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name)
-
-      if (entry.isDirectory()) {
-        await searchDir(fullPath, baseDir)
-      } else if (entry.isFile() && entry.name === 'page.tsx') {
-        result.push(path.relative(baseDir, dir))
-        return // Once we find a page.tsx, no need to search further in this directory
-      }
-    }
-  }
-
-  await searchDir(parentDir, parentDir)
-  return result
-}
+const { allExamples } = new Examples()
 
 const greenTick = '\x1b[32m✔\x1b[0m'
 const redCross = '\x1b[31m✖\x1b[0m'
 const yellowSkip = '\x1b[33m⏭\x1b[0m'
 
-async function recordPages() {
-  const slugs = await findDirectoriesWithPageFile(examplesDir)
-  console.log(`Found ${slugs.length} directories with page.tsx files`)
-  console.log(slugs)
+const ffmpegPath = '/opt/homebrew/bin/ffmpeg'
+ffmpeg.setFfmpegPath(ffmpegPath)
 
-  for (const slug of slugs) {
-    const pageName = path.basename(slug)
-    const videoOutputParentDir = path.join(videoOutputDir, slug)
-    if (!fs.existsSync(videoOutputParentDir)) {
-      fs.mkdirSync(videoOutputParentDir, { recursive: true })
+/**
+ * Main function to record all pages based on passed options
+ */
+async function main() {
+  const { force, example, host } = program.opts()
+
+  if (example) {
+    const foundExample = allExamples.find((e) => e.slug === example)
+
+    if (!foundExample) {
+      console.error(`${redCross} Example not found: ${example}`)
+      process.exit(1)
     }
-    const videoFile = path.join(videoOutputDir, slug, 'video.mp4')
-
-    if (fs.existsSync(videoFile)) {
-      console.log(`${yellowSkip} Video already exists for page: ${slug}`)
-    } else {
-      console.log(`Recording page: ${slug}`)
-
-      console.log(videoFile)
-
-      const url = `http://localhost:3002/examples/${slug}` // Replace with your URL
-      await recordPage(url, videoFile)
-    }
+    await recordExample(foundExample, host, force)
+  } else {
+    await recordExamples(host, force)
   }
 }
 
-async function recordPage(url: string, outputFile: string) {
+/**
+ * Records videos for all examples
+ */
+async function recordExamples(host: string, force = false) {
+  console.log(`Recording pages to: ${videoOutputDir}`)
+
+  for (const example of allExamples) {
+    await recordExample(example, host, force)
+  }
+}
+
+/**
+ * Records a single example, creating the video and thumbnail
+ * @param example The Example to record
+ * @param force If true, will re-record the video even if it already exists
+ * @returns void
+ */
+async function recordExample(example: Example, host: string, force = false) {
+  const { slug, videoHeight = 600, videoWidth = 800 } = example
+
+  const videoOutputParentDir = path.join(videoOutputDir, slug)
+  if (!fs.existsSync(videoOutputParentDir)) {
+    fs.mkdirSync(videoOutputParentDir, { recursive: true })
+  }
+
+  //where the video should end up
+  const videoFile = path.join(videoOutputDir, slug, 'video.mp4')
+
+  //where the thumbnail should end up
+  const thumbFile = path.join(videoOutputDir, slug, 'thumb.png')
+
+  if (fs.existsSync(videoFile) && !force) {
+    console.log(`${yellowSkip} Video already exists for page: ${slug}`)
+    return
+  } else {
+    console.log(`Recording page: ${slug}`)
+  }
+
+  const url = `${host}/examples/${slug}`
   const browser = await puppeteer.launch({
     headless: true,
     ignoreHTTPSErrors: true,
-    args: [`--window-size=800,600`],
+    args: [`--window-size=${videoWidth},${videoHeight}`],
     defaultViewport: {
-      width: 800,
-      height: 600,
+      width: videoWidth,
+      height: videoHeight,
     },
   })
   const page = await browser.newPage()
 
   const recorder = new PuppeteerScreenRecorder(page)
-  const tmpFile = path.join(examplesDir, 'temp.mp4')
+  const tmpFile = path.join(__dirname, 'temp.mp4')
   await recorder.start(tmpFile)
   await page.goto(url)
 
@@ -89,53 +112,40 @@ async function recordPage(url: string, outputFile: string) {
   await recorder.stop()
   await browser.close()
 
-  // Trim the video and overlay the timer
-  await trimAndOverlayTimer(tmpFile, outputFile)
+  // thumbnail the video and overlay the timer
+  await createThumbnail(tmpFile, thumbFile)
+  await addTimerOverlay(tmpFile, videoFile)
   fs.unlinkSync(tmpFile) // Clean up the temporary file
 }
 
-const ffmpegPath = '/opt/homebrew/bin/ffmpeg' // Replace with the path from `which ffmpeg`
-ffmpeg.setFfmpegPath(ffmpegPath)
-
-async function trimAndOverlayTimer(inputFile: string, outputFile: string) {
-  const frames: Buffer[] = []
-  let lastFrame: Buffer | null = null
-  let lastFrameIndex = 0
-
-  // Extract frames from the video
+/**
+ * Create a thumbnail from the last frame of the video
+ * @param inputFile The video to create the thumbnail from
+ * @param outputFile The thumbnail file to create
+ */
+async function createThumbnail(inputFile: string, outputFile: string) {
+  console.log('Creating thumbnail')
   await new Promise<void>((resolve, reject) => {
     ffmpeg(inputFile)
       .on('end', resolve)
       .on('error', reject)
-      .outputOptions('-vf', 'fps=10') // Extract 10 frames per second
-      .output('%d.png')
-      .run()
+      .screenshots({
+        timestamps: ['90%'],
+        filename: 'thumb.png',
+        folder: '.',
+      })
   })
+  console.log(`${greenTick} Thumbnail created`)
 
-  // Load frames into buffers
-  const frameFiles = fs
-    .readdirSync('.')
-    .filter((file) => file.match(/^\d+\.png$/))
-  console.log(frameFiles)
-  for (const file of frameFiles) {
-    const frame = fs.readFileSync(file)
-    frames.push(frame)
-    if (!lastFrame || !buffersAreEqual(lastFrame, frame)) {
-      lastFrame = frame
-      lastFrameIndex = frames.length - 1
-    }
-    fs.unlinkSync(file) // Clean up the frame file
-  }
+  // Move the thumbnail to the correct location
+  fs.renameSync('thumb.png', outputFile)
+}
 
-  console.log(`lastFrameIndex: ${lastFrameIndex} (${frames.length} frames)`)
+async function addTimerOverlay(inputFile: string, outputFile: string) {
+  console.log('Overlaying timer')
 
-  // Calculate the duration for the trim filter
-  const duration = Math.floor(lastFrameIndex / 10)
-  console.log(`Duration for trimming: ${duration} seconds`)
-
-  // Create the trimmed video with timer overlay
-  console.log('Start trimming and overlaying timer')
-  const command = `ffmpeg -y -i ${inputFile} -vf "trim=start=0:end=${duration},drawtext=text='%{pts\\:hms}':x=10:y=H-th-50:fontsize=48:fontcolor=black" -an ${outputFile}`
+  //for some reason this fails when using the ffmpeg lib, but works via execPromise...
+  const command = `ffmpeg -y -i ${inputFile} -vf "drawtext=text='%{pts\\:hms}':x=10:y=H-th-50:fontsize=48:fontcolor=black" -an ${outputFile}`
 
   console.log(`Running command: ${command}`)
   await execPromise(command)
@@ -162,4 +172,4 @@ function buffersAreEqual(buf1: Buffer, buf2: Buffer): boolean {
   return true
 }
 
-recordPages().catch(console.error)
+main().catch(console.error)

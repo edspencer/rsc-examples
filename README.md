@@ -1,56 +1,24 @@
-## Examples
+A collection of React Server Component examples, hosted at https://rsc-examples.edspencer.net, or runnable locally via `npm start dev`.
 
-- Slow loading, async page function, no suspense
-- Slow loading, async page function, page-level suspense
-- Slow loading, async page function, component-level suspense
-- Slow loading, sync page function, no suspense (should be very slow)
-- Slow loading, sync page function, component-level suspense (gold standard?)
-- Fast loading, async page function, no suspense
-- Fast loading, async page function, page-level suspense
-- Rendering components as promise resolution
-- Various promise return types for RSC Payload (Promises across the void article demo)
+These were created to support a series of blog posts I wrote about React Server Components at https://edspencer.net.
 
-# Syntax
+## Features
 
-Syntax is a [Tailwind UI](https://tailwindui.com) site template built using [Tailwind CSS](https://tailwindcss.com) and [Next.js](https://nextjs.org).
+Uses `<MDXRemote>` to render the contents of the `README.mdx` files, using their frontmatter
 
-## Getting started
+## Adding Examples
 
-To get started with this template, first install the npm dependencies:
+Examples are found in the src/app/examples folder. Each example should contain at least a `README.mdx`, which will be rendered as the page content when the example is visited in the browser. Typically an example will also contain a `page.tsx`, which contains the actual example source, as well as potentially other auxiliary files.
 
-```bash
-npm install
-```
+The `README.mdx` should contain a frontmatter declaration that at least contains a title and a slug, which is the url the example will be served from. The slug should mirror the directory structure of the example files.
 
-Next, run the development server:
+## Recording videos
 
-```bash
-npm run dev
-```
+Run `npm run video` to automatically generate timestamped videos of all examples that don't currently have one in the `public/videos` directory.
 
-Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
+## To do
 
-## Customizing
-
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
-
-## Global search
-
-This template includes a global search that's powered by the [FlexSearch](https://github.com/nextapps-de/flexsearch) library. It's available by clicking the search input or by using the `⌘K` shortcut.
-
-This feature requires no configuration, and works out of the box by automatically scanning your documentation pages to build its index. You can adjust the search parameters by editing the `/src/markdoc/search.mjs` file.
-
-## License
-
-This site template is a commercial product and is licensed under the [Tailwind UI license](https://tailwindui.com/license).
-
-## Learn more
-
-To learn more about the technologies used in this site template, see the following resources:
-
-- [Tailwind CSS](https://tailwindcss.com/docs) - the official Tailwind CSS documentation
-- [Next.js](https://nextjs.org/docs) - the official Next.js documentation
-- [Headless UI](https://headlessui.dev) - the official Headless UI documentation
-- [Markdoc](https://markdoc.io) - the official Markdoc documentation
-- [Algolia Autocomplete](https://www.algolia.com/doc/ui-libraries/autocomplete/introduction/what-is-autocomplete/) - the official Algolia Autocomplete documentation
-- [FlexSearch](https://github.com/nextapps-de/flexsearch) - the official FlexSearch documentation
+- Form examples
+- Server Action examples
+- Option to disable video looping
+- Thumbnails of video previews

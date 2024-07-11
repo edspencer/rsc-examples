@@ -15,6 +15,8 @@ export type Example = {
   status: string
   galleryTitle: string
   description: string
+  videoHeight?: number
+  videoWidth?: number
 }
 
 //returns an array of all .mdx files in a directory and its subdirectories

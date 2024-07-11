@@ -28,6 +28,7 @@
     "autoprefixer": "^10.4.12",
     "bright": "^0.8.5",
     "clsx": "^2.1.0",
+    "commander": "^12.1.0",
     "fast-glob": "^3.2.12",
     "flexsearch": "^0.7.31",
     "fluent-ffmpeg": "^2.1.3",

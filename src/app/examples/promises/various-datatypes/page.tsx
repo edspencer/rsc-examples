@@ -12,8 +12,10 @@ async function getData(value: any, delay: number): Promise<any> {
 
 export default function SuspensePage() {
   return (
-    <div className="mx-4 my-4 flex flex-col gap-4">
-      <p>This line rendered on the server. Below this, values will stream in</p>
+    <div>
+      <p>
+        This line rendered on the server. Below this, values will stream in.
+      </p>
       <p>Now here's a Promise that resolved to a string:</p>
       <SuspenseWrapper value={'some string'} delay={1000} />
 
