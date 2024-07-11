@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const examples = new Examples()
-  const publishedExamples = examples.publishedExamples
+  const tags = examples.getTags()
 
   return (
     <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 md:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
@@ -44,9 +44,28 @@ export default function HomePage() {
             created for.
           </p>
 
-          <h3>All Examples</h3>
+          <p>
+            The examples are grouped by tag in the grid below. Most examples
+            have more than one tag so show up here more than once.
+          </p>
+          {/* <h3>All Examples</h3> */}
         </Prose>
-        <ExampleGallery examples={publishedExamples} />
+        {/* <input
+          type="text"
+          placeholder="Search examples..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="mb-10 mt-6 w-full rounded-md border border-gray-300 p-2 placeholder:italic dark:border-slate-800 dark:bg-slate-900 dark:text-sky-100"
+        /> */}
+        {tags.map((tag) => (
+          <div key={tag} className="mb-24 mt-12">
+            <h3 className="mb-4 font-display capitalize underline">
+              {tag} examples
+            </h3>
+
+            <ExampleGallery examples={examples.getExamplesByTag(tag)} />
+          </div>
+        ))}
       </article>
       <PrevNextLinks />
     </div>
