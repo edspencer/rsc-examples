@@ -1,0 +1,85 @@
+---
+title: Streaming rendered components from the server
+galleryTitle: Streaming rendered components from the server
+description: As well as data, fully-rendered React components can be streamed as promises
+slug: promises/rendering-components
+fullPage: true
+tags:
+  - promises
+  - data
+---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [streaming data with
+  promises](https://edspencer.net/2024/7/12/promises-across-the-void-react-server-components).
+  See that post for a more detailed explanation of the concepts here.
+</Callout>
+
+One of the interesting things you can do with RSC and Promises is to resolve a fully-rendered React component as a promise. This allows you to stream the component from the server to the client, which can be useful for components that take a long time to render.
+
+```page.tsx
+import { Suspense } from 'react'
+import ClientPortal from '@/components/examples/ClientPortal'
+
+export default function SuspensePage() {
+  return (
+    <div>
+      <p>
+        This line rendered on the server. A little later, there's a Suspense
+        boundary that will be filled with a server-rendered component delivered
+        as a Promise.
+      </p>
+
+      <p>
+        Under this line will appear a server-rendered component that took 2
+        seconds to generate. This could be a complex chart or something, though
+        here it's just some raw data
+      </p>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ClientPortal childrenPromise={renderHeavyComponent(2000)} />
+      </Suspense>
+    </div>
+  )
+}
+
+function renderHeavyComponent(delay: number): Promise<React.ReactNode> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(<ServerChildComponent data={{ some: 'data' }} />)
+    }, delay)
+  })
+}
+
+function ServerChildComponent({ data }: { data: any }) {
+  return (
+    <div>
+      <h3>This rendered on the server, inside a Suspense boundary</h3>
+      <p>
+        It could have been a big heavy data table or graph or something,
+        otherwise why do this? Anyway here's the data:
+      </p>
+      {JSON.stringify(data)}
+    </div>
+  )
+}
+```
+
+ClientPortal looks like this:
+
+```ClientPortal.tsx
+'use client'
+import { use } from 'react'
+
+export default function ClientPortal({ childrenPromise }: {
+  childrenPromise: Promise<React.ReactNode>
+}) {
+  const children = use(childrenPromise)
+
+  return <div className="border border-blue-600">{children}</div>
+}
+```
+
+So our ClientPortal component is a client component that accepts a Promise which should ultimately resolve to a ReactNode. It uses the `use` hook to resolve the promise and then renders the result.
+
+This is generally not a great pattern to employ as you don't get much benefit from it in this simple case, but it's a good demonstration of the power of promises in RSC. There are likely to be use cases where you may need to dynamically generate React content asynchronously and deliver it after the initial UI has rendered, so this is one way to do that.
