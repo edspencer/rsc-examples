@@ -16,7 +16,7 @@ export type Example = {
   galleryTitle: string
   description: string
   videoHeight?: number
-  fullPage?: boolean
+  iframeDemo?: boolean
   videoWidth?: number
   demoText?: string
   hasVideo?: boolean

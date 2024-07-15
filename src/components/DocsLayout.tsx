@@ -12,7 +12,7 @@ export function DocsLayout({
   children: React.ReactNode
   frontmatter: Example
 }) {
-  const { title, slug, fullPage, hasVideo } = example
+  const { title, slug, hasVideo } = example
 
   return (
     <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">

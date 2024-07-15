@@ -17,9 +17,9 @@ export function FullPageDemo({ example }: { example: Example }) {
     }
   }
 
-  const { slug, fullPage, hasVideo, demoText = defaultDemoText } = example
+  const { slug, iframeDemo, hasVideo, demoText = defaultDemoText } = example
 
-  if (!fullPage) return null
+  if (!iframeDemo) return null
 
   return (
     <div className="mt-12">
