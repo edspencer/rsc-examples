@@ -8,8 +8,6 @@ export default function Figure({
   alt,
   width = 930,
   height = 600,
-  href,
-  target,
 }: {
   className?: string
   src: string

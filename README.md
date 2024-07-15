@@ -20,5 +20,6 @@ Run `npm run video` to automatically generate timestamped videos of all examples
 
 - Form examples
 - Server Action examples
-- Error handling
+- Intro doc
 - Option to disable video looping
+- Fix search
