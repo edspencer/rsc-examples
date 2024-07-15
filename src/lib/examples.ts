@@ -18,6 +18,7 @@ export type Example = {
   videoHeight?: number
   fullPage?: boolean
   videoWidth?: number
+  demoText?: string
   hasVideo?: boolean
 }
 

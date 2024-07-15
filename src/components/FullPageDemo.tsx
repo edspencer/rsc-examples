@@ -6,6 +6,9 @@ import VideoPreview from '@/components/VideoPreview'
 import { Button } from '@/components/Button'
 import type { Example } from '@/lib/examples'
 
+const defaultDemoText =
+  "This example can't be easily inlined as it demonstrates how a full-page feels to the end user. Here it is inside an iframe, and there's a looping video below too."
+
 export function FullPageDemo({ example }: { example: Example }) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const handleRefresh = () => {
@@ -14,18 +17,14 @@ export function FullPageDemo({ example }: { example: Example }) {
     }
   }
 
-  const { slug, fullPage, hasVideo } = example
+  const { slug, fullPage, hasVideo, demoText = defaultDemoText } = example
 
   if (!fullPage) return null
 
   return (
     <div className="mt-12">
       <h2>Live Demo</h2>
-      <p>
-        This example can't be easily inlined as it demonstrates how a full-page
-        feels to the end user. Here it is inside an iframe, and there's a
-        looping video below too.
-      </p>
+      <p>{demoText}</p>
       <div className="flex items-center justify-between">
         <p>
           <Link target="_blank" href={`/examples/${slug}`}>

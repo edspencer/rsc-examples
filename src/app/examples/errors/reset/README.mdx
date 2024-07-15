@@ -1,0 +1,109 @@
+---
+title: Retrying render after an error
+slug: errors/reset
+galleryTitle: Retrying render after an error
+description: Logic to retry rendering a component after an error
+fullPage: true
+hasVideo: false
+demoText: There's a 50% chance that this example will throw an error. If it does, a Reset button will appear that you can click to reset the page. Otherwise, hit the refresh button above the iframe to try it again.
+tags:
+  - page
+  - error
+---
+
+If a component on our page throws an error that we catch in an error boundary, it can be useful to offer the user a way to retry that component without hitting refresh in their browser. This is possible by using a combination of
+
+Here's a Page that has a child component that throws an error 50% of the time.
+
+```page.tsx
+export default function ResettablePage() {
+  return (
+    <>
+      <p>
+        This page has a 50% chance of throwing an error. If it does, a Reset
+        button will appear that you can click to reset the page.
+      </p>
+      <p>
+        This is useful for when you want to give the user a way to recover from
+        an error without having to refresh the entire page. Refresh the page a
+        few times if you don't get the error immediately.
+      </p>
+      <ErrorComponent />
+    </>
+  )
+}
+
+async function ErrorComponent() {
+  // Simulate a delay so we can see the Reset button spinning
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  if (Math.random() > 0.5) {
+    throw new Error('Error thrown in component')
+  }
+
+  return (
+    <p className="border border-blue-700 p-4">
+      This has a 50% chance of throwing an error
+    </p>
+  )
+}
+```
+
+If that error is thrown, our `error.tsx` fallback will be rendered. This fallback includes a Reset button that will reset the page when clicked. That process is handled by the `retry` function, which calls `router.refresh()` to reset the page.
+
+While the page is being reset, we show a spinner to indicate that the page is loading. This spinner is a simple component that we've created called `Spinner`. This complicates the example a little, but is useful UX to show your user that something is happening, especially if the component that errored is a heavy or slow-loading one.
+
+```error.tsx
+'use client'
+
+import { startTransition, useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+import Spinner from './Spinner'
+
+export default function ErrorMessage({ reset }: { reset: () => void }) {
+  const router = useRouter()
+
+  const [isResetting, setIsResetting] = useState(false)
+
+  function retry() {
+    setIsResetting(true)
+
+    startTransition(() => {
+      router.refresh()
+      reset()
+      setIsResetting(false)
+    })
+  }
+
+  return (
+    <div>
+      <p className="text-orange-700">
+        There was an error with this page, caught by error.tsx so we can show
+        this custom message.
+      </p>
+      <button
+        onClick={() => retry()}
+        disabled={isResetting}
+        className="inline-flex items-center gap-4 rounded-md border bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+      >
+        {isResetting ? <Spinner /> : null}
+        Retry
+      </button>
+    </div>
+  )
+}
+
+```
+
+Our `error.tsx` component receives a reset function as a prop, which is passed in automatically by next.js. However, calling `reset()` will not reset the page. Instead, we need to call `router.refresh()` to reset the page. We also wrap this in a `startTransition` to ensure that the page doesn't flicker when we reset it.
+
+<Callout type="warning">
+  The `reset()` function does not actually reset the component, or the page,
+  just the state of the error boundary. To retry the render, you need to call
+  `router.refresh()`.
+</Callout>
+
+The call to `router.refresh()` will cause the entire page to re-render, so it's not as surgical as simply reloading a single component. However, it's a good way to give the user a way to recover from an error without having to refresh the entire page. To the user it will look like the component is being reloaded, which is often good enough.
+
+Because `router.refresh()` works asynchronously (we're going over the network to re-render on the server, after all), but does not return a Promise, we can't use `async/await` syntax here. Thankfully, we can wrap that call in a `startTransition`, which will automatically have React update the UI once the new RSC payload is received.

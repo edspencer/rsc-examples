@@ -86,6 +86,10 @@ export const navigation = [
         title: 'Using error.tsx',
         href: '/errors/error-tsx',
       },
+      {
+        title: 'Retrying render after error',
+        href: '/errors/reset',
+      },
     ],
   },
   // {
