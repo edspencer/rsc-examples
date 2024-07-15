@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import CaptionedContent from './CaptionedContent'
 
 export default function Figure({
@@ -24,15 +23,13 @@ export default function Figure({
   return (
     <CaptionedContent className={className} caption={caption}>
       <div className="flex justify-center">
-        <Link href={href || src} target={target}>
-          <Image
-            className="rounded-md"
-            src={src}
-            width={width}
-            height={height}
-            alt={alt ?? caption}
-          />
-        </Link>
+        <Image
+          className="rounded-md"
+          src={src}
+          width={width}
+          height={height}
+          alt={alt ?? caption}
+        />
       </div>
     </CaptionedContent>
   )
