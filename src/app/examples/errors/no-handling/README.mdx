@@ -1,0 +1,52 @@
+---
+title: No error handling
+slug: errors/no-handling
+galleryTitle: No error handling
+description: When happens out of the box when you have an RSC error and don't handle it
+fullPage: true
+hasVideo: false
+tags:
+  - page
+  - error
+---
+
+What happens when you render a page that throws an error? Let's find out!
+
+```page.tsx
+export default function NoHandling() {
+  return (
+    <>
+      <p>
+        This page demonstrates what happens when an error is thrown in a
+        component and there is no error boundary to catch it. The error will
+        bubble up to the nearest error boundary, which in this case is the root
+        of the app.
+      </p>
+
+      <ErrorComponent />
+    </>
+  )
+}
+
+function ErrorComponent() {
+  throw new Error('Error thrown in component')
+
+  return 'This will never be rendered'
+}
+```
+
+What you see will depend on whether you are running in dev or production mode. Here's what dev looks like:
+
+<Figure
+  src="/videos/errors/no-handling/no-handling-dev.png"
+  caption="This is what you will see in dev mode"
+/>
+
+And here's what production looks like:
+
+<Figure
+  src="/videos/errors/no-handling/no-handling-prod.png"
+  caption="This is what you will see in production mode"
+/>
+
+That's not the greatest user experience in the world, and even though only one component in our app is throwing an error, the entire app is affected. Let's see how we can improve this with either an [explicit error boundary](/errors/error-boundary) or an [error.tsx](/errors/error-tsx).

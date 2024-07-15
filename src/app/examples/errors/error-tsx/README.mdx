@@ -1,0 +1,64 @@
+---
+title: Using error.tsx
+slug: errors/error-tsx
+galleryTitle: Using error.tsx
+description: Using the error.tsx convention to catch errors
+fullPage: true
+hasVideo: false
+tags:
+  - page
+  - error
+  - boundary
+---
+
+When you render a page that throws an error, you can catch it using the `error.tsx` convention. This is a file that you can create in the same directory as the page that is throwing the error, and it will be used to render an error message when an error is thrown.
+
+```page.tsx
+export default function () {
+  return (
+    <>
+      <p>
+        This page demonstrates what happens when an error is thrown in a
+        component with no error handling of its own, but with an `error.tsx`
+        present either in the same directory or in a parent directory.
+      </p>
+
+      <ErrorComponent />
+
+      <p>None of this content will show up.</p>
+    </>
+  )
+}
+
+function ErrorComponent() {
+  throw new Error('Error thrown in component')
+
+  return 'This will never be rendered'
+}
+```
+
+Although we didn't catch the error in `ErrorComponent`, we can still provide a custom error message by creating an `error.tsx` file in the same directory as the page that is throwing the error. Here's what that looks like:
+
+```error.tsx
+'use client'
+
+export default function ErrorMessage() {
+  return (
+    <div className="text-orange-700">
+      There was an error with this page, caught by error.tsx so we can show this
+      custom message.
+    </div>
+  )
+}
+```
+
+<Callout type="warning">
+#### error.tsx must be a client component
+
+If you take this approach, the `error.tsx` file must be a client component. This is because the error is caught on the client side, and the error message is rendered in the client. If you try to use a server component for `error.tsx`, you'll see an error in the console.
+
+</Callout>
+
+When you run this page, you'll see the error message from `error.tsx` instead of the error message from the thrown error. This is a great way to provide a better user experience when errors occur in your app than what happens by default, but it's still a bit heavy-handed as the entire app is affected by the error.
+
+If you can, it's better to be intentional about where you catch errors, so your user can still see all of the other content on the page. This is where [explicit error boundaries](/errors/error-boundary) come in.

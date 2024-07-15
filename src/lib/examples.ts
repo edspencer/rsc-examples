@@ -16,7 +16,9 @@ export type Example = {
   galleryTitle: string
   description: string
   videoHeight?: number
+  fullPage?: boolean
   videoWidth?: number
+  hasVideo?: boolean
 }
 
 //returns an array of all .mdx files in a directory and its subdirectories

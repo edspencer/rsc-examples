@@ -1,0 +1,58 @@
+---
+title: Explicit Error Boundary
+slug: errors/error-boundary
+galleryTitle: Using an Error Boundary
+description: Using an Error Boundary to catch server component errors
+fullPage: true
+hasVideo: false
+tags:
+  - page
+  - error
+  - boundary
+---
+
+This example demonstrates how to use an explicit error boundary to catch errors thrown by a server component. The process is very much the same as with client components, with the only difference being that the error boundary is a server component itself.
+
+This example uses the simple [react-error-boundary](https://github.com/bvaughn/react-error-boundary) library to create the error boundary. It's pretty easy to [roll your own](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary) if you prefer.
+
+Here's the code:
+
+```page.tsx
+import { ErrorBoundary } from 'react-error-boundary'
+
+export default function PageWithBoundary() {
+  return (
+    <>
+      <p>
+        This page demonstrates what happens when an error is thrown in a
+        component with an explicit error boundary.
+      </p>
+
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <ErrorComponent />
+      </ErrorBoundary>
+    </>
+  )
+}
+
+function ErrorComponent() {
+  throw new Error('Error thrown in component')
+
+  return 'This will never be rendered'
+}
+
+function ErrorFallback() {
+  return (
+    <div className="text-red-700">There was an error with this content</div>
+  )
+}
+```
+
+That's it! The `ErrorBoundary` component will catch any errors thrown by its children and render the `fallback` component instead. This is a much better user experience than the default behavior, which is to render either and error or nothing at all.
+
+Here's how that looks:
+
+<Figure
+  src="/videos/errors/error-boundary/error-boundary.png"
+  caption="This is what you will see when an error is thrown in a component with an error boundary"
+/>

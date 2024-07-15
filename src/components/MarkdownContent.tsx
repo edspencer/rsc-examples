@@ -2,6 +2,8 @@ import remarkGfm from 'remark-gfm'
 import { Code } from 'bright'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { Callout } from './Callout'
+import CaptionedContent from './CaptionedContent'
+import Figure from './Figure'
 
 Code.theme = {
   dark: 'github-dark',
@@ -21,6 +23,8 @@ const mdxOptions = {
 const components = {
   pre: Code,
   Callout,
+  Figure,
+  CaptionedContent,
 
   //just colors any `inline code stuff` blue
   code: (props: object) => (

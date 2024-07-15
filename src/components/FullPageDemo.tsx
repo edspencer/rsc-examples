@@ -4,20 +4,17 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import VideoPreview from '@/components/VideoPreview'
 import { Button } from '@/components/Button'
+import type { Example } from '@/lib/examples'
 
-export function FullPageDemo({
-  slug,
-  fullPage,
-}: {
-  slug?: string
-  fullPage: boolean
-}) {
+export function FullPageDemo({ example }: { example: Example }) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const handleRefresh = () => {
     if (iframeRef.current) {
       iframeRef.current.src = iframeRef.current.src
     }
   }
+
+  const { slug, fullPage, hasVideo } = example
 
   if (!fullPage) return null
 
@@ -63,7 +60,7 @@ export function FullPageDemo({
           /examples/{slug}
         </Link>
       </figcaption>
-      <VideoPreview slug={slug} />
+      {hasVideo !== false ? <VideoPreview slug={slug} /> : null}
     </div>
   )
 }

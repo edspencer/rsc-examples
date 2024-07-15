@@ -22,7 +22,7 @@ export const navigation = [
     ],
   },
   {
-    title: 'Pages with slow data fetching',
+    title: 'Full Pages',
     links: [
       {
         title: 'async page, no suspense',
@@ -36,23 +36,10 @@ export const navigation = [
         title: 'component-level suspense',
         href: '/pages/slow/component-suspense',
       },
-    ],
-  },
-  {
-    title: 'Pages with fast data fetching',
-    links: [
       {
         title: 'async, no suspense',
         href: '/pages/fast/no-suspense',
       },
-      // {
-      //   title: 'Page-level suspense',
-      //   href: '/pages/fast/page-suspense',
-      // },
-      // {
-      //   title: 'Component-level suspense',
-      //   href: '/pages/fast/component-suspense',
-      // },
     ],
   },
   {
@@ -78,6 +65,23 @@ export const navigation = [
       //   title: 'With custom payload',
       //   href: '/promises/with-custom-payload',
       // },
+    ],
+  },
+  {
+    title: 'Handling Errors',
+    links: [
+      {
+        title: 'No boundaries',
+        href: '/errors/no-handling',
+      },
+      {
+        title: 'Explicit Error Boundary',
+        href: '/errors/error-boundary',
+      },
+      {
+        title: 'Using error.tsx',
+        href: '/errors/error-tsx',
+      },
     ],
   },
   // {
