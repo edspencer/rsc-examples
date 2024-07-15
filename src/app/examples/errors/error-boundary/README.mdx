@@ -11,6 +11,13 @@ tags:
   - boundary
 ---
 
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [errors and retry for React Server
+  Components](https://edspencer.net/2024/7/16/errors-and-retry-with-react-server-components).
+  See that post for a more detailed explanation of the concepts here.
+</Callout>
+
 This example demonstrates how to use an explicit error boundary to catch errors thrown by a server component. The process is very much the same as with client components, with the only difference being that the error boundary is a server component itself.
 
 This example uses the simple [react-error-boundary](https://github.com/bvaughn/react-error-boundary) library to create the error boundary. It's pretty easy to [roll your own](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary) if you prefer.

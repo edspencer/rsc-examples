@@ -1,8 +1,8 @@
 ---
-title: Retrying render after an error
-slug: errors/reset
-galleryTitle: Retrying render after an error
-description: Logic to retry rendering a page after an error
+title: Retry single component after error
+slug: errors/reset-boundary
+galleryTitle: Retry single component after error
+description: Logic to retry rendering a component after an error
 iframeDemo: true
 hasVideo: false
 demoText: There's a 50% chance that this example will throw an error. If it does, a Reset button will appear that you can click to reset the page. Otherwise, hit the refresh button above the iframe to try it again.
@@ -18,24 +18,27 @@ tags:
   See that post for a more detailed explanation of the concepts here.
 </Callout>
 
-If a component on our page throws an error that we catch in an `error.tsx` error boundary, it can be useful to offer the user a way to retry that component without hitting refresh in their browser.
+If a component on our page throws an error, we can either [catch it at the page level via `error.tsx`](/errors/reset), or we can wrap the error-prone component in an `ErrorBoundary` so that we can render the rest of the page even if that component fails.
 
-Here's a Page that has a child component that throws an error 50% of the time.
+Here's a Page that has a child component that throws an error 50% of the time, wrapped in an `ErrorBoundary`:
 
 ```page.tsx
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorFallback from './ErrorFallback'
+
 export default function ResettablePage() {
   return (
     <>
       <p>
-        This page has a 50% chance of throwing an error. If it does, a Reset
-        button will appear that you can click to reset the page.
+        This page has a component with a 50% chance of throwing an error. If it
+        does, a Reset button will appear that you can click to reset the
+        component.
       </p>
-      <p>
-        This is useful for when you want to give the user a way to recover from
-        an error without having to refresh the entire page. Refresh the page a
-        few times if you don't get the error immediately.
-      </p>
-      <ErrorComponent />
+      <p>The rest of the page will render as normal.</p>
+
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <ErrorComponent />
+      </ErrorBoundary>
     </>
   )
 }
@@ -50,19 +53,15 @@ async function ErrorComponent() {
 
   return (
     <p className="border border-blue-700 p-4">
-      This has a 50% chance of throwing an error
+      This has a 50% chance of throwing an error, but this time it rendered
+      fine.
     </p>
   )
 }
+
 ```
 
-If that error is thrown, our `error.tsx` fallback will be rendered. This fallback includes a Reset button that will reset the page when clicked. That process is handled by the `retry` function, which calls `router.refresh()` to reset the page.
-
-<Callout>
-  A better way to do this is not at the page level, but [at the component
-  level](/errors/reset-boundary). This way, you can retry just the component
-  that errored, rather than the entire page.
-</Callout>
+If that error is thrown, our `ErrorFallback` fallback will be rendered. This fallback includes a Reset button that will reset the page when clicked. That process is handled by the `retry` function, which calls `router.refresh()` to reset the page.
 
 While the page is being reset, we show a spinner to indicate that the page is loading. This spinner is a simple component that we've created called `Spinner`. This complicates the example a little, but is useful UX to show your user that something is happening, especially if the component that errored is a heavy or slow-loading one.
 
@@ -74,9 +73,16 @@ import { useRouter } from 'next/navigation'
 
 import Spinner from './Spinner'
 
-export default function ErrorMessage({ reset }: { reset: () => void }) {
+export default function ErrorFallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error
+  resetErrorBoundary: () => void
+}) {
   const router = useRouter()
 
+  //tracks the state of our reset button
   const [isResetting, setIsResetting] = useState(false)
 
   function retry() {
@@ -84,21 +90,18 @@ export default function ErrorMessage({ reset }: { reset: () => void }) {
 
     startTransition(() => {
       router.refresh()
-      reset()
+      resetErrorBoundary()
       setIsResetting(false)
     })
   }
 
   return (
-    <div>
-      <p className="text-orange-700">
-        There was an error with this page, caught by error.tsx so we can show
-        this custom message.
-      </p>
+    <div className="border border-orange-700 p-4 text-orange-700">
+      <p className="m-0 mb-2 p-0">There was an error loading this component</p>
       <button
         onClick={() => retry()}
         disabled={isResetting}
-        className="inline-flex items-center gap-4 rounded-md border bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        className="button inline-flex items-center gap-4 rounded-md border bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
       >
         {isResetting ? <Spinner /> : null}
         Retry
@@ -106,10 +109,9 @@ export default function ErrorMessage({ reset }: { reset: () => void }) {
     </div>
   )
 }
-
 ```
 
-Our `error.tsx` component receives a reset function as a prop, which is passed in automatically by next.js. However, calling `reset()` will not reset the page. Instead, we need to call `router.refresh()` to reset the page. We also wrap this in a `startTransition` to ensure that the page doesn't flicker when we reset it.
+Our `ErrorFallback.tsx` component receives a `resetErrorBoundary` function as a prop, which is passed in automatically by next.js. However, calling `resetErrorBoundary()` will not reset the page. Instead, we need to call `router.refresh()` to reset the page. We also wrap this in a `startTransition` to ensure that the page doesn't flicker when we reset it.
 
 <Callout type="warning">
   The `reset()` function does not actually reset the component, or the page,

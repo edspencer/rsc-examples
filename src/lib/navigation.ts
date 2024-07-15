@@ -87,8 +87,12 @@ export const navigation = [
         href: '/errors/error-tsx',
       },
       {
-        title: 'Retrying render after error',
+        title: 'Retry page after error',
         href: '/errors/reset',
+      },
+      {
+        title: 'Retry component after error',
+        href: '/errors/reset-boundary',
       },
     ],
   },
