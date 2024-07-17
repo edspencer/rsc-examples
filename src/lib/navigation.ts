@@ -61,10 +61,10 @@ export const navigation = [
         title: 'Rejected promises',
         href: '/promises/rejected',
       },
-      // {
-      //   title: 'Handled Rejected promises',
-      //   href: '/promises/rejected-handled',
-      // },
+      {
+        title: 'Handled Rejected promises',
+        href: '/promises/rejected-handled',
+      },
       {
         title: 'Various data types',
         href: '/promises/various-datatypes',

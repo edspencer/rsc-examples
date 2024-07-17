@@ -19,7 +19,11 @@ import { Suspense } from 'react'
 import Table from '@/components/examples/table'
 
 async function getData(delay: number) {
-  return new Promise((resolve, reject) => setTimeout(reject, delay))
+  return new Promise((resolve, reject) => setTimeout(() => {
+    //SUPER IMPORTANT: You must provide an Error to reject() or next.js will crash
+    //see https://github.com/vercel/next.js/issues/67863
+    reject(new Error('Data load failed'))
+  }, delay))
 }
 
 export default function RejectedPromisePage() {
@@ -27,10 +31,10 @@ export default function RejectedPromisePage() {
     <>
       <p>This page was rendered on the server.</p>
       <p>
-        It wants to show a data table below, but the data is rejected. The table
-        component is wrapped in a Suspense component, which will show a loading
-        message until the data is ready. In this case, the data will never be
-        ready, so the loading message will stay on the screen
+        It wants to show a data table below, but the promise is rejected. The
+        table component is wrapped in a Suspense component, which will show a
+        loading message until the data is ready. In this case, the data will
+        never be ready, so the loading message will stay on the screen
       </p>
 
       <Suspense fallback={<LoadingMessage />}>
@@ -39,6 +43,9 @@ export default function RejectedPromisePage() {
     </>
   )
 }
+
 ```
 
 What happens here? The `getData` function returns a Promise that is rejected after a delay. There's no error handling in this example, so what happens is that we'll see an error message in our server logs, and the client will show the loading message indefinitely.
+
+This is not a great UX, so it is better to [handle the rejected promise with an ErrorBoundary](/promises/rejected-handled).

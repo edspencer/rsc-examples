@@ -4,7 +4,11 @@ import { Suspense } from 'react'
 import Table from '@/components/examples/table'
 
 async function getData(delay: number) {
-  return new Promise((resolve, reject) => setTimeout(reject, delay))
+  return new Promise((resolve, reject) => setTimeout(() => {
+    //SUPER IMPORTANT: You must provide an Error to reject() or next.js will crash
+    //see https://github.com/vercel/next.js/issues/67863
+    reject(new Error('Data load failed'))
+  }, delay))
 }
 
 export default function RejectedPromisePage() {

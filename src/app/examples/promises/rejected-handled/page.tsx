@@ -3,12 +3,15 @@ import { LoadingMessage } from '@/components/LoadingMessage'
 
 import { Suspense } from 'react'
 import Table from './table'
+import { ErrorFallback } from './fallback'
 
 //just rejects after a specified delay
 function getData(delay: number) {
   return new Promise((resolve, reject) =>
     setTimeout(() => {
-      reject()
+      //SUPER IMPORTANT: You must provide an Error to reject() or next.js will crash
+      //see https://github.com/vercel/next.js/issues/67863
+      reject(new Error('Data load failed'))
     }, delay),
   )
 }
@@ -28,11 +31,5 @@ export default function RejectedPromisePage() {
         </Suspense>
       </ErrorBoundary>
     </>
-  )
-}
-
-function ErrorFallback() {
-  return (
-    <div className="text-red-700">There was an error with this content</div>
   )
 }
