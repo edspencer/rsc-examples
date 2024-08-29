@@ -106,7 +106,7 @@ export default function Page() {
             </li>
             <li>
               <Link href="https://www.smashingmagazine.com/2024/05/forensics-react-server-components/">
-                Forensics of React Server Components by Lazar Nokolav
+                Forensics of React Server Components by Lazar Nikolov
               </Link>
             </li>
             <li>
