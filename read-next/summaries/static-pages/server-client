@@ -1,0 +1,7 @@
+This example demonstrates how to effectively combine server and client components using React Server Components (RSC) with Next.js. It features a server-rendered page that includes a child component, `<MicrophoneList />`, which is designated as a client component due to its need to interact with browser-specific APIs, such as accessing the microphone.
+
+The main page component, defined in `page.tsx`, renders a header and a paragraph indicating that it is server-rendered, followed by the `<MicrophoneList />` component. 
+
+The `<MicrophoneList />` component, located in `microphonelist.tsx`, utilizes the `'use client'` directive to indicate that it should run in the browser. It employs the `useEffect` hook to asynchronously fetch a list of available microphones using a utility function, `getMicrophones`, and stores this data in the component's state. The component then displays the list of microphones, demonstrating its capability to access the mediaDevices API.
+
+This example highlights the seamless integration of server-rendered content with client-side interactivity, showcasing how to manage components that require different execution contexts within a Next.js application.

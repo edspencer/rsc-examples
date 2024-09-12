@@ -1,0 +1,7 @@
+This example demonstrates how to use React Server Components with a focus on providing user feedback during form submissions. It highlights the use of the `useFormStatus` hook to display a loading spinner while waiting for a server response, simulating a slow server with a 3-second delay. 
+
+The code snippet showcases a `SlowForm` component that utilizes `useFormState` to manage form submission state and display messages based on the submission status. A separate `SubmitButton` component is created to handle the loading state, as `useFormStatus` cannot be used in the same component as the form. This separation allows for reusability of the button across different forms.
+
+Additionally, the example emphasizes the importance of implementing authentication for server actions in real-world applications, as these endpoints require careful consideration regarding security. 
+
+Overall, this example serves as a practical guide for implementing user feedback in forms using React Server Components and managing form states effectively.

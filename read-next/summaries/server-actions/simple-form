@@ -1,0 +1,9 @@
+This example demonstrates how to create a simple form in React using Server Actions with Next.js. It utilizes the `useFormState` hook to manage form submissions directly to the server. The form allows users to input a device name, and upon submission, it triggers a server action defined in a separate file.
+
+The `AddDeviceForm` component includes a text input for the device name and a submit button. It displays success or error messages based on the submission outcome. The server action, `createDeviceAction`, processes the form data, simulating a device creation with a random ID and performing basic validation to ensure the name is provided.
+
+The example emphasizes the need to mark the form component as a client component with `'use client'` and the server action with `'use server'`. It also highlights the importance of considering authentication for server actions in real applications.
+
+Finally, the form is rendered within a page component, allowing for standard form behavior, including keyboard submission. The document notes the distinction between `useFormState` and `useActionState`, indicating that the choice depends on the React version being used.
+
+This example serves as a practical guide for implementing server-side form handling in React applications using Next.js.

@@ -1,0 +1,5 @@
+This example demonstrates how to handle errors in React Server Components using an `ErrorBoundary`. The main component, `ResettablePage`, includes a child component, `ErrorComponent`, which has a 50% chance of throwing an error. If an error occurs, the `ErrorBoundary` catches it and displays an `ErrorFallback` component, which includes a Reset button.
+
+The `ErrorComponent` simulates a delay before potentially throwing an error, and if it succeeds, it renders a message. The `ErrorFallback` component provides a user-friendly way to retry loading the component by calling a `retry` function that refreshes the page using `router.refresh()`. This function is wrapped in a `startTransition` to prevent UI flickering during the refresh process.
+
+The example emphasizes that while the `resetErrorBoundary` function resets the error state, it does not refresh the page; instead, `router.refresh()` is necessary for that. This approach allows users to recover from errors without needing to refresh the entire page, enhancing the user experience.

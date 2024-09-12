@@ -1,0 +1,7 @@
+This example demonstrates how to use React Server Components to stream data from the server to the client using Promises. The main feature is the ability to initiate a data request on the server, which returns a Promise that can be sent to the client. The client can then wait for this Promise to resolve without blocking the rendering of the rest of the UI.
+
+The example consists of a simple page that includes a server component rendering static content and a data table. The `<Table>` component receives a `dataPromise` prop, which is a Promise that resolves to an array of objects after a simulated delay of 1000 milliseconds. 
+
+The `getData` function simulates fetching data from a fake database, returning a Promise that resolves with an array of user objects after the specified delay. The `<Table>` component, marked as a client component, uses the `use` hook to wait for the `dataPromise` to resolve before rendering the table with the fetched data.
+
+Overall, this example illustrates the seamless integration of server and client components in React, allowing for efficient data fetching and rendering.

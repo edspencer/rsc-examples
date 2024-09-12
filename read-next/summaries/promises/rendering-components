@@ -1,0 +1,7 @@
+This example demonstrates how to utilize React Server Components (RSC) in conjunction with Promises to stream a fully-rendered React component from the server to the client. The main focus is on rendering a component that may take a significant amount of time to generate, allowing for a smoother user experience.
+
+The code snippet includes a `SuspensePage` component that renders a message on the server and then uses a `Suspense` boundary to display a server-rendered component that takes 2 seconds to generate. This is achieved through the `renderHeavyComponent` function, which returns a Promise that resolves to a `ServerChildComponent` containing some data.
+
+The `ClientPortal` component is a client-side component that accepts a Promise and uses the `use` hook to resolve it, rendering the resulting ReactNode. While this pattern may not be optimal for simple cases, it effectively illustrates the potential of using Promises with RSC for dynamically generating and delivering React content asynchronously after the initial UI has rendered. 
+
+Overall, this example serves as a practical demonstration of how to leverage RSC and Promises for improved rendering strategies in React applications.

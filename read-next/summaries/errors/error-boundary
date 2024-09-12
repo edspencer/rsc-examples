@@ -1,0 +1,5 @@
+This example illustrates the use of an explicit error boundary in React Server Components to handle errors thrown by a server component. It highlights that the implementation is similar to client components, with the key distinction being that the error boundary itself is a server component. The example utilizes the `react-error-boundary` library to create the error boundary, although it notes that developers can also create their own custom error boundaries.
+
+The provided code defines a `PageWithBoundary` component that includes an `ErrorBoundary` wrapping an `ErrorComponent`. When the `ErrorComponent` throws an error, the `ErrorBoundary` catches it and renders a fallback component, `ErrorFallback`, which displays an error message. This approach enhances user experience by providing a clear indication of an error, rather than showing a generic error or nothing at all.
+
+Overall, this example serves as a practical demonstration of error handling in React Server Components, emphasizing the importance of user-friendly error management.

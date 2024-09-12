@@ -1,0 +1,5 @@
+This example demonstrates how to handle errors in React Server Components using the `error.tsx` convention. When a page throws an error, you can create an `error.tsx` file in the same or a parent directory to display a custom error message instead of the default error output. 
+
+The example includes a page component that intentionally throws an error within an `ErrorComponent`. Since the error is not caught within the component, the custom error message defined in `error.tsx` is rendered instead. The `error.tsx` file must be a client component because error handling occurs on the client side.
+
+The provided code snippets illustrate the setup: the main page component includes an error-throwing component, while the `error.tsx` file defines a user-friendly error message. This approach enhances user experience by providing clearer feedback when errors occur, although it affects the entire app. The document also suggests that using explicit error boundaries can be a more refined way to manage errors, allowing other content on the page to remain visible.

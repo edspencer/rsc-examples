@@ -1,0 +1,3 @@
+This example demonstrates how to handle a rejected Promise in a React Server Component. The `getData` function simulates a data fetch that fails after a specified delay by returning a rejected Promise with an error message. The `RejectedPromisePage` component attempts to render a data table using this Promise, wrapped in a `Suspense` component that displays a loading message while waiting for the data.
+
+Since the Promise is rejected, the loading message remains indefinitely on the client side, and an error is logged on the server. The example highlights the importance of handling rejected Promises properly to improve user experience, suggesting the use of an ErrorBoundary for better error management.

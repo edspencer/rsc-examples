@@ -1,0 +1,9 @@
+This example demonstrates how to use React Server Components with Next.js to validate form data using the Zod library. It focuses on creating a form that collects device information and validates the input on the server side before submission. 
+
+The example includes a Zod schema that defines the structure and validation rules for the form fields, such as device name, type, and hostname. The server action processes the form data, validates it against the schema, and either creates a device or returns validation error messages if the input is invalid.
+
+The form component is designed to display validation errors for each field, providing user feedback directly in the UI. It also includes helper functions to manage error states and display success messages upon successful device creation.
+
+Additionally, the example emphasizes the importance of implementing authentication for server actions in real-world applications, as these endpoints are not automatically secured.
+
+Overall, this example serves as a practical guide for integrating form validation in React Server Components using Next.js and Zod.

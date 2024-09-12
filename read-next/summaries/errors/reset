@@ -1,0 +1,10 @@
+This example demonstrates how to implement error handling and retry functionality in React Server Components using an error boundary. The main component, `ResettablePage`, includes a child component, `ErrorComponent`, which randomly throws an error 50% of the time. When an error occurs, a fallback UI defined in `error.tsx` is displayed, featuring a "Retry" button that allows users to reset the page without refreshing the browser.
+
+The `ErrorComponent` simulates a delay before potentially throwing an error, while the `ErrorMessage` component manages the retry logic. It uses the `useRouter` hook from Next.js to refresh the page when the "Retry" button is clicked. A spinner is shown during the reset process to enhance user experience.
+
+Key points include:
+- The `reset()` function provided by Next.js only resets the state of the error boundary, not the page itself.
+- The `router.refresh()` method is called to re-render the entire page, which is wrapped in a `startTransition` to prevent UI flickering.
+- The example emphasizes the importance of providing users with a way to recover from errors gracefully.
+
+For more advanced error handling, the document suggests implementing retry functionality at the component level instead of the page level.

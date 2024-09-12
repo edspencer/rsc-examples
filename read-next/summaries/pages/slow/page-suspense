@@ -1,0 +1,5 @@
+This example demonstrates how to utilize the `loading.tsx` convention in Next.js to implement automatic full-page Suspense boundaries with React Server Components. It features a simulated database call through the `slowDataLoad()` function, which takes 2 seconds to return data. Without using Suspense, the page waits for the data to load before rendering any content.
+
+By creating a `loading.tsx` file in the same directory as the `page.tsx`, Next.js automatically wraps the page component in a `<Suspense>` boundary, using the exported component from `loading.tsx` as a fallback. This allows a loading message to be displayed immediately while the data is being fetched, enhancing the user experience by showing a loading state for approximately 3 seconds before the actual content is rendered.
+
+The example illustrates how the presence of `loading.tsx` effectively transforms the page's behavior, allowing for a smoother loading experience.

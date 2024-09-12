@@ -1,0 +1,7 @@
+This example demonstrates how to stream various types of data to the client using React Server Components and Promises. It showcases the ability to handle different data types, including strings, integers, floats, plain JSON objects, arrays, and rendered React components. 
+
+The core of the example is the `getData` function, which simulates fetching data with specified delays. A custom component, `<SuspenseWrapper>`, is used to wrap the `<ClientPromise>` component within a `<Suspense>` boundary, allowing for the streaming of data as it resolves. The `ClientPromise` component is responsible for rendering the resolved data, displaying it differently based on its type.
+
+Additionally, the example includes a demonstration of returning a rendered React component from a Promise, highlighting the capability of React Server Components to return complex client-side components. The `<ClientPortal>` component is used to illustrate this feature, although it is noted that the `<Suspense>` boundary alone can suffice in many cases.
+
+Overall, this example serves as a practical guide for implementing data streaming in React applications using Server Components and Promises, with a focus on maintaining clean and reusable code through the use of custom components.
