@@ -1,0 +1,126 @@
+---
+title: Server Action Form Submission
+galleryTitle: Server Action Form Submission
+description: 'Forms can be submitted directly to Server Actions'
+slug: server-actions/simple-form
+tags:
+  - actions
+  - form
+---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [Using Server Actions with Next
+  JS](https://edspencer.net/2024/6/4/using-server-actions-with-nextjs). See that
+  post for a more detailed explanation of the concepts here.
+</Callout>
+
+Forms can be submitted directly to the server using Server Actions. Here's a basic form that shows how to do that with the `useFormState` hook (see warning below on whether to use that or `useActionState`):
+
+```form.tsx
+'use client'
+import { useFormState } from 'react-dom'
+import { createDeviceAction } from './action'
+
+export function AddDeviceForm() {
+  const [state, formAction] = useFormState(createDeviceAction, {
+    status: '',
+    message: '',
+  })
+
+  return (
+    <form action={formAction} className="server-actions-simple-form">
+      <fieldset>
+        <label htmlFor="name">Name:</label>
+        <input type="text" name="name" id="name" placeholder="type something" />
+        <button type="submit">Submit</button>
+      </fieldset>
+      {state.status === 'error' && (
+        <p className="text-red-500">{state.message}</p>
+      )}
+      {state.status === 'success' && (
+        <p className="text-green-500">{state.message}</p>
+      )}
+    </form>
+  )
+}
+```
+
+## Live Demo
+
+Here's a live inline demo of this form in action. If you submit it without entering any text, its server action will return an error message. If you enter some text, it will return a success message with an ID for the device you created.
+
+<SimpleFormPage />
+
+Under the covers, React creates an API endpoint for us, and then provides its own wrapper calls and data structures on both the request and response cycles, leaving us to focus solely on our UI and business logic. It uses our `createDeviceAction` to automatically create an endpoint, and if you submit the form you will see a POST request being made to whatever url the form is on.
+
+<Callout type="warning">
+#### Use client components for forms
+
+If you plan to use a form with a Server Action, it needs to be marked as a client component by adding `'use client'` to the top of the file. RSCs can render forms just fine, but if you want to use the `useFormState` hook, your code needs to be running on the client.
+
+</Callout>
+
+The Server Action that this form submits to is defined in a separate file. This runs on the server, so add a 'use server' directive at the top of the file:
+
+```action.ts
+'use server'
+
+export async function createDeviceAction(prevState: any, formData: FormData) {
+  const name = formData.get('name')
+
+  if (name) {
+    const device = {
+      name,
+      id: Math.round(Math.random() * 10000),
+    }
+
+    return {
+      status: 'success',
+      message: `Device '${name}' created with ID: ${device.id}`,
+      device,
+    }
+  } else {
+    return {
+      status: 'error',
+      message: 'Name is required',
+    }
+  }
+}
+
+```
+
+<Callout type="warning">
+#### Authentication doesn't happen automagically
+
+This is a very simple example, but in a real-world application you would likely want to add some kind of authentication to your server actions. These server action endpoints are as wide open as any other, so you need to reason about them in the exact same way when it comes to authentication and authorization.
+
+</Callout>
+
+The `createDeviceAction` function receives the form data and returns an object with a `status` and `message` property. The code here is simulating a database mutation and doing some basic validation. If the form data is valid, it also returns a `device` object. You don't need to use `status` and `message` in your form - you can send anything you like back.
+
+Finally, you can render the form in your app (in this case we're rendering the page that contains the form as an RSC):
+
+```page.tsx
+import { AddDeviceForm } from './form'
+
+export default function SimpleFormPage() {
+  return (
+    <div>
+      <h1>Simple Form</h1>
+      <AddDeviceForm />
+    </div>
+  )
+}
+```
+
+One nice thing about this is that the Enter key works on your keyboard without any extra code. This is because the form is a real form, and the submit button is a real submit button. The formAction hook is doing the work of intercepting the form submission and calling the server action instead of the default form submission. It feels more like the old school web.
+
+<Callout type="warning">
+#### useFormState vs useActionState
+
+At the moment (mid-2024), you might need to use `useActionState` or `useFormState`, depending on which version of React you are using. `useActionState` is only available in React 19 canary, while `useFormState` is available in React 18, though in 18 it's on 'react-dom'.
+
+Clear as mud? Take a look at [this GH issue](https://github.com/vercel/next.js/issues/65673) for clues on which to use based on your version of React/react-dom/Next.js.
+
+</Callout>

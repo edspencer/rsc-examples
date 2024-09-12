@@ -1,0 +1,79 @@
+---
+title: Form Status
+galleryTitle: Form Status
+description: 'How to show a spinner or other status while a form is submitting'
+slug: server-actions/form-status
+iframeDemo: false
+tags:
+  - actions
+  - form
+---
+
+<Callout type="note">
+  This example was originally created as one of several examples I wrote for a
+  post about [Using Server Actions with Next
+  JS](https://edspencer.net/2024/6/4/using-server-actions-with-nextjs). See that
+  post for a more detailed explanation of the concepts here.
+</Callout>
+
+In many cases, the backend may take a few seconds to process the user's request. It's always a good idea to provide some visual feedback to the user while they are waiting. There's another new React hook called `useFormStatus` that we can use to show a loading spinner while the request is pending.
+
+## Live Demo
+
+Here's how that feels in practice - try submitting the form with or without entering any text. The server action has an artificial 3 second delay to simulate a slow server response.
+
+<FormSubmissionStatusPage />
+
+## Code
+
+This is a slightly modified version of the [simple form example](/server-actions/simple-form) that shows gives the user some feedback while the request is being processed:
+
+```form.tsx
+'use client'
+import { useFormState, useFormStatus } from 'react-dom'
+import { createDeviceActionSlow } from './action'
+
+export function SlowForm() {
+  const [state, formAction] = useFormState(createDeviceActionSlow, {
+    status: '',
+    message: '',
+  })
+
+  return (
+    <form action={formAction} className="server-actions-simple-form">
+      <fieldset>
+        <label htmlFor="name">Name:</label>
+        <input type="text" name="name" id="name" placeholder="type something" />
+        <SubmitButton />
+      </fieldset>
+      {state.status === 'error' && (
+        <p className="text-red-500">{state.message}</p>
+      )}
+      {state.status === 'success' && (
+        <p className="text-green-500">{state.message}</p>
+      )}
+    </form>
+  )
+}
+
+//this has to be a separate component because we can't use the useFormStatus hook in the
+//same component that has the <form>
+function SubmitButton() {
+  const { pending } = useFormStatus()
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? 'Submitting...' : 'Submit'}
+    </button>
+  )
+}
+```
+
+The main thing to note here is that we had to split our `SubmitButton` into a separate React component, because the `useFormStatus` hook can't be used in the same component that has the `<form>` tag. On the one hand this can mean a bit more boilerplate, but on the other hand it means you can create a SubmitButton component that can be reused across multiple forms and provide a consistent user experience.
+
+<Callout type="warning">
+#### Authentication doesn't happen automagically
+
+This is a very simple example, but in a real-world application you would likely want to add some kind of authentication to your server actions. These server action endpoints are as wide open as any other, so you need to reason about them in the exact same way when it comes to authentication and authorization.
+
+</Callout>

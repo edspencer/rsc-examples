@@ -100,25 +100,25 @@ export const navigation = [
       },
     ],
   },
-  // {
-  //   title: 'Forms',
-  //   links: [
-  //     {
-  //       title: 'Basic',
-  //       href: '/forms/basic',
-  //     },
-  //     {
-  //       title: 'Validation',
-  //       href: '/forms/validation',
-  //     },
-  //     {
-  //       title: 'Submission',
-  //       href: '/forms/submission',
-  //     },
-  //     {
-  //       title: 'Submission with validation',
-  //       href: '/forms/submission-with-validation',
-  //     },
-  //   ],
-  // },
+  {
+    title: 'Server Actions',
+    links: [
+      // {
+      //   title: 'Action Triggering',
+      //   href: '/server-actions/button-trigger',
+      // },
+      {
+        title: 'Form Submission',
+        href: '/server-actions/simple-form',
+      },
+      {
+        title: 'Form Submission with status',
+        href: '/server-actions/form-status',
+      },
+      {
+        title: 'Form Validation',
+        href: '/server-actions/form-zod-validation',
+      },
+    ],
+  },
 ]

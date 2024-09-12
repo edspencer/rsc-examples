@@ -3,7 +3,7 @@ import { PrevNextLinks } from '@/components/PrevNextLinks'
 import { Prose } from '@/components/Prose'
 import { ExampleHeader } from './ExampleHeader'
 import { FullPageDemo } from './FullPageDemo'
-import type { Example } from '@/lib/examples'
+import { Example } from '@/lib/examples'
 
 export function DocsLayout({
   children,
@@ -12,10 +12,10 @@ export function DocsLayout({
   children: React.ReactNode
   frontmatter: Example
 }) {
-  const { title, slug, hasVideo } = example
+  const { title, slug } = example
 
   return (
-    <div className="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
+    <div className="flex min-w-0 max-w-2xl flex-col gap-8 px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
       <article>
         <DocsHeader title={title} />
         <ExampleHeader slug={slug} />

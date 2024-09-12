@@ -5,6 +5,11 @@ import { Callout } from './Callout'
 import CaptionedContent from './CaptionedContent'
 import Figure from './Figure'
 
+//example-specific components
+import SimpleFormPage from '@/app/examples/server-actions/simple-form/page'
+import FormSubmissionStatusPage from '@/app/examples/server-actions/form-status/page'
+import ValidatedFormPage from '@/app/examples/server-actions/form-zod-validation/page'
+
 Code.theme = {
   dark: 'github-dark',
   light: 'github-light',
@@ -25,6 +30,11 @@ const components = {
   Callout,
   Figure,
   CaptionedContent,
+
+  //example-specific components
+  SimpleFormPage,
+  FormSubmissionStatusPage,
+  ValidatedFormPage,
 
   //just colors any `inline code stuff` blue
   code: (props: object) => (

@@ -8,3 +8,30 @@
     display: none;
   }
 }
+
+form.server-actions-simple-form {
+  @apply mb-6 rounded-md border border-gray-400 p-4;
+
+  fieldset {
+    @apply flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4;
+
+    label {
+      @apply font-bold;
+    }
+
+    input {
+      @apply flex-1 rounded-md border px-2 py-1;
+    }
+
+    button {
+      @apply rounded bg-blue-500 px-4 py-1 font-bold text-white hover:bg-blue-700;
+    }
+    button[disabled] {
+      @apply bg-gray-400;
+    }
+  }
+
+  p {
+    @apply mb-0 mt-2;
+  }
+}
