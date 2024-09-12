@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer'
-import commander from 'commander'
+import * as commander from 'commander'
 import { PuppeteerScreenRecorder } from 'puppeteer-screen-recorder'
 import ffmpeg from 'fluent-ffmpeg'
 import Examples from './examples'
@@ -127,7 +127,7 @@ async function createThumbnail(inputFile: string, outputFile: string) {
   console.log('Creating thumbnail')
   await new Promise<void>((resolve, reject) => {
     ffmpeg(inputFile)
-      .on('end', resolve)
+      .on('end', () => resolve())
       .on('error', reject)
       .screenshots({
         timestamps: ['90%'],
