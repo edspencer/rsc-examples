@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "video": "npx tsx src/lib/video.ts"
+    "video": "npx tsx src/lib/video.ts",
+    "related": "npx tsx src/script/related.ts"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
@@ -59,6 +60,7 @@
     "eslint-config-next": "^14.0.4",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
+    "read-next": "^0.2.0",
     "sharp": "0.33.1",
     "tsx": "^4.19.1"
   }

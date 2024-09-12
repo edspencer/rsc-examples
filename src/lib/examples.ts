@@ -23,6 +23,7 @@ export type Example = {
   videoWidth?: number
   demoText?: string
   hasVideo?: boolean
+  related?: string[]
 }
 
 //returns an array of all .mdx files in a directory and its subdirectories
