@@ -7,6 +7,9 @@ export type Tag = {
   count: number
 }
 
+/**
+ * Represents an example with various properties.
+ */
 export type Example = {
   title: string
   date: string
@@ -44,20 +47,40 @@ export const examplesDir = path.join(process.cwd(), 'src', 'app', 'examples')
 export const pathToExampleFile = (example: any) =>
   path.join(examplesDir, example.slug, 'README.mdx')
 
+/**
+ * Class representing a collection of examples.
+ */
 export default class Examples {
+  /**
+   * The base directory where examples are stored.
+   */
   baseDirectory: string
+
+  /**
+   * Array of all file paths for the examples.
+   */
   allFiles: string[]
+
+  /**
+   * Array of all examples.
+   */
   allExamples: Example[]
+
+  /**
+   * Array of published examples.
+   */
   publishedExamples: Example[]
+
+  /**
+   * Array of examples visible based on the environment.
+   */
+  visibleExamples: Example[]
 
   constructor() {
     this.baseDirectory = path.join(examplesDir)
 
-    // console.time('Finding all .mdx files in the blog directory');
     this.allFiles = findMdxFiles(this.baseDirectory)
-    // console.timeEnd('Finding all .mdx files in the blog directory');
 
-    // console.time('Reading all .mdx files');
     this.allExamples = this.allFiles
       .map((file) => {
         const source = fs.readFileSync(file)
@@ -66,23 +89,35 @@ export default class Examples {
         return data as Example
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    // console.timeEnd('Reading all .mdx files');
+
+    this.publishedExamples = this.allExamples.filter(
+      (example) => example.status !== 'draft',
+    )
 
     if (process.env.NODE_ENV !== 'production') {
-      this.publishedExamples = this.allExamples
+      this.visibleExamples = this.allExamples
     } else {
-      this.publishedExamples = this.allExamples.filter(
+      this.visibleExamples = this.allExamples.filter(
         (example) => example.status !== 'draft',
       )
     }
   }
 
+  /**
+   * Retrieves examples by a specific tag.
+   * @param tag - The tag to filter examples by.
+   * @returns An array of examples that match the given tag.
+   */
   getExamplesByTag(tag: string) {
     return this.publishedExamples.filter((example: any) =>
       example.tags.includes(tag),
     )
   }
 
+  /**
+   * Retrieves all unique tags from the published examples.
+   * @returns An array of unique tags.
+   */
   getTags(): string[] {
     const tags = new Set()
     this.publishedExamples.forEach((example: any) => {
@@ -93,6 +128,26 @@ export default class Examples {
     return Array.from(tags).map((tag) => String(tag))
   }
 
+  /**
+   * Updates the front matter of a given example.
+   * @param example - The example to update.
+   * @param updates - An object containing the updates to apply.
+   */
+  updateMatter(example: Example, updates: Record<string, any>) {
+    const fileName = pathToExampleFile(example)
+
+    const fileContents = fs.readFileSync(fileName, 'utf-8')
+    const { content, data } = matter(fileContents)
+
+    const newContent = matter.stringify(content, { ...data, ...updates })
+
+    fs.writeFileSync(fileName, newContent)
+  }
+
+  /**
+   * Retrieves tags along with their counts.
+   * @returns An array of tags with their respective counts.
+   */
   getTagsWithCounts(): Tag[] {
     const tags = this.getTags()
     const tagCounts: any = {}
@@ -104,6 +159,11 @@ export default class Examples {
       .sort((a, b) => b.count - a.count)
   }
 
+  /**
+   * Retrieves the content of a given example.
+   * @param example - The example to retrieve content for.
+   * @returns The content of the example as a string.
+   */
   getContent(example: any) {
     const source = fs.readFileSync(pathToExampleFile(example))
 
@@ -116,6 +176,11 @@ export default class Examples {
     }
   }
 
+  /**
+   * Retrieves the latest published examples.
+   * @param count - The number of latest examples to retrieve.
+   * @returns An array of the latest published examples.
+   */
   getLatestExamples(count: number) {
     return this.publishedExamples.slice(0, count)
   }
