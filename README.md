@@ -16,10 +16,15 @@ The `README.mdx` should contain a frontmatter declaration that at least contains
 
 Run `npm run video` to automatically generate timestamped videos of all examples that don't currently have one in the `public/videos` directory.
 
+## Generating Related Examples
+
+Uses [ReadNext](https://github.com/edspencer/read-next) to generate the related examples at the bottom of each example page. Re-generate these by running (making sure an `OPENAI_API_KEY` is present in env variables):
+
+```sh
+npm run related
+```
+
 ## To do
 
-- Form examples
-- Server Action examples
-- Intro doc
 - Option to disable video looping
 - Fix search
