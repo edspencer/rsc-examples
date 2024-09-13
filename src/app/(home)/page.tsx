@@ -91,6 +91,11 @@ export default function Page() {
                 Decoding React Server Component Payloads
               </Link>
             </li>
+            <li>
+              <Link href="https://edspencer.net/2024/7/16/errors-and-retry-with-react-server-components">
+                Error handling and retry with React Server Components
+              </Link>
+            </li>
           </ul>
 
           <p>
@@ -110,8 +115,8 @@ export default function Page() {
               </Link>
             </li>
             <li>
-              <Link href="https://www.jackfranklin.co.uk/blog/react-server-components-deep-dive/">
-                React Server Components: A deep dive by Jack Franklin
+              <Link href="https://www.plasmic.app/blog/how-react-server-components-work">
+                How React server components work by @chungwu
               </Link>
             </li>
           </ul>

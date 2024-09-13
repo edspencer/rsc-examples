@@ -12,6 +12,15 @@
     "video": "npx tsx src/lib/video.ts",
     "related": "npx tsx src/script/related.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edspencer/rsc-examples.git"
+  },
+  "keywords": [
+    "rsc",
+    "react",
+    "nextjs"
+  ],
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@algolia/autocomplete-core": "^1.9.2",
